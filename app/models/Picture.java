@@ -20,13 +20,15 @@ public class Picture extends Model{
 	
 	public int width;
 	
+	public int height;
+	
 	public Picture(String url, int width, int height) {
 		this.url = url;
 		this.width = width;
 		this.height = height;
 	}
 
-	int height;
+	
 	
 	public static Finder<Long,Picture> find = new Finder<Long,Picture>(
 		    Long.class, Picture.class
