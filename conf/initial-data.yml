@@ -11,10 +11,10 @@ users:
         longitude: 10.3936
         
   	- !!models.User
-        id:      2
+        id:      
         firstName:  Ole
-        profilePictureId:   1
-        latitude: 59.7475
+        profilePictureId:   1        
+        latitude: 59.7475        
         longitude: 10.41
     
     
@@ -24,9 +24,9 @@ pictures:
 
     - !!models.Picture
         id:         1
-        url:       	https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/t1.0-1/c78.4.101.101/s50x50/555215_10153057005145385_1038569793_a.jpg   
-        height:    	50
-        width:		50
+        url:        https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/t1.0-1/c78.4.101.101/s50x50/555215_10153057005145385_1038569793_a.jpg   
+        height:     50
+        width:      50
 
    
             
