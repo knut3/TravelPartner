@@ -3,18 +3,18 @@
 
 users:
 
-  	- !!models.User
+    - !!models.User
         id:      1
         firstName:  Stian
         profilePictureId:   1
         latitude: 59.75
         longitude: 10.3936
         
-  	- !!models.User
-        id:      
+    !!models.User
+        id:
         firstName:  Ole
-        profilePictureId:   1        
-        latitude: 59.7475        
+        profilePictureId:   1
+        latitude: 59.7475
         longitude: 10.41
     
     
