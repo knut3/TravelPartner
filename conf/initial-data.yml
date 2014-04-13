@@ -11,7 +11,7 @@ users:
         longitude: 10.3936
         
     !!models.User
-        id:
+        id: 2
         firstName:  Ole
         profilePictureId:   1
         latitude: 59.7475
