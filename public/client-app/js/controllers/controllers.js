@@ -97,8 +97,8 @@ angular.module('travel.controllers', [])
 
 
     $scope.center = {
-            lat: 12.3,
-            lng: 13.0,
+            lat: 59.7475,
+            lng: 10.3936,
             zoom: 12
             };
 
