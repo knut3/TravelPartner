@@ -1,0 +1,11 @@
+<ion-view title="Messages">
+  <ion-content class="has-header">
+    <ion-list>
+        <ion-item ng-repeat="friend in friends" class="item item-avatar" href="#/tab/messages/{{friend.id}}">
+            <img ng-src={{friend.profilePicture}}>
+            <h2>{{friend.firstName}}</h2>
+            <p>Last message received 2 days ago</p>
+        </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
