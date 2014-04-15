@@ -101,7 +101,6 @@ angular.module('travel.controllers', [])
             };
 
     $scope.defaults = {
-            maxZoom: 14,
             minZoom: 8
             };
 
