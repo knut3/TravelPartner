@@ -59,15 +59,25 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
       }
     })
 
+    .state('tab.view-profile', {
+      url: 'map/:userId',
+      views: {
+          'tab-map': {
+              templateUrl: 'assets/client-app/templates/view-profile.html',
+              controller: 'ViewProfileCtrl'
+          }
+      }
+    })
+
     .state('tab.account', {
       url: '/account',
       views: {
         'tab-account': {
             templateUrl: 'assets/client-app/templates/tab-account.html',
-          controller: 'AccountCtrl'
+            controller: 'AccountCtrl'
         }
       }
-    })
+    });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/map');

@@ -18,7 +18,7 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
                     config.headers.Authorization = 'Bearer ' + accessToken;
                     return config;
                 });
-            }, {scope: 'email,user_likes'});
+            }, {scope: ''});
         },
         logout: function() {
 
@@ -29,16 +29,28 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
     };
     return service;
 })
-.factory('Travelers', function($http) {
+.factory('Users', function($http) {
 
   return {
     all: function() {
         return $http.get("users");
     },
-    get: function (travelerId) {
-        return $http.get("users/"+travelerId);
+    get: function (userId) {
+        return $http.get("users/"+userId);
     }
   }
+})
+
+.factory('Locations', function($http) {
+
+    return {
+        setCurrent: function (lat, lng) {
+            return $http.post("me/locations/current?lat="+lat+"&lng="+lng);
+        },
+        getCurrent: function () {
+            return $http.get("me/locations/current");
+        }
+    }
 })
 
 .factory('Dialogs', function() {

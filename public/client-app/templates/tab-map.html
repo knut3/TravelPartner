@@ -1,11 +1,11 @@
 <ion-view title="Map">
 
-    <ion-pane class="padding-top">
+    <ion-content scroll="false" has-header="true">
         <div id="mapWrapper" ng-controller="MapCtrl">
-            <ul ng-cloak>
-                <li><strong ng-bind="eventDetected"></strong> event caught in listener.</li>
-            </ul>
             <leaflet event-broadcast="events" defaults="defaults" center="center" markers="markers"></leaflet>
-        </div>s
-    </ion-pane>
+            <button ng-click="setPosition()" id="updateLocationBtn" class="button button-block button-positive">
+                Update my location
+            </button>
+        </div>
+    </ion-content>
 </ion-view>

@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.net.URLEncoder;
 
 import models.Picture;
 import models.User;
@@ -59,9 +60,10 @@ public class Authorization extends Action<Authorization.Authorized>{
         = (User.find.where().idEq(userId).findRowCount() == 1) ? true : false;
   		
   		if(!userExists){
-  			String content = "batch=["
-  					+ "{'method':'GET', 'relative_url':'me?fields=first_name,gender'}, "
-  					+ "{'method':'GET', 'relative_url':'me/picture?redirect=0'}]";
+  			String content = "batch=[" +
+  					URLEncoder.encode("{'method':'GET', 'relative_url':'me?fields=first_name,gender'}, "
+  					+ "{'method':'GET', 'relative_url':'me/picture?redirect=0&type=square&height=50&width=50'}", "UTF-8")
+  					+"]";
   			WSRequestHolder userInfoRequest = WS.url("https://graph.facebook.com");
   			userInfoRequest.setQueryParameter("access_token", accessToken);
   			idRequest.setQueryParameter("appsecret_proof", appSecretProof);
@@ -72,16 +74,21 @@ public class Authorization extends Action<Authorization.Authorized>{
   	  		JsonNode profilePicture = Json.parse(userInfoResp.get(1).get("body").asText()).get("data");
   	  		// Add to database
   	  		
-  	  		Picture profilePic = new Picture(
-  	  				profilePicture.get("url").asText(),50,50);
-  	  		profilePic.save();
-  	  		
   	  		User newUser = new User(
-  	  				Long.parseLong(userId), 
-  	  				me.get("first_name").asText(), 
-  	  				me.get("gender").asText(),
-  	  				profilePic.id);
+	  				Long.parseLong(userId), 
+	  				me.get("first_name").asText(), 
+	  				me.get("gender").asText());
+	  		
+  	  		
+  	  		Picture profilePic = new Picture(
+  	  				profilePicture.get("url").asText(),
+  	  				newUser.id, 
+  	  				profilePicture.get("width").asInt(), 
+  	  				profilePicture.get("height").asInt());
+  	  		profilePic.save();
+  	  		newUser.profilePicture = profilePic;
   	  		newUser.save();
+  	  		
   		}
   		
   		ctx.args.put(ContextArgsKeys.USER_ID, userId);

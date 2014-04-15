@@ -1,9 +1,9 @@
 <ion-view title="Messages">
   <ion-content class="has-header">
     <ion-list>
-        <ion-item ng-repeat="friend in friends" class="item item-avatar" href="#/tab/messages/{{friend.id}}">
-            <img ng-src={{friend.profilePicture}}>
-            <h2>{{friend.firstName}}</h2>
+        <ion-item ng-repeat="user in users" class="item item-avatar" href="#/tab/messages/{{user.id}}">
+            <img ng-src={{user.profilePicture.url}}>
+            <h2>{{user.firstName}}</h2>
             <p>Last message received 2 days ago</p>
         </ion-item>
     </ion-list>

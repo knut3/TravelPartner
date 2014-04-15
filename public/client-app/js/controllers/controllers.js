@@ -55,31 +55,29 @@ angular.module('travel.controllers', [])
     $scope.contr = ""
 })
 
-.controller('MapCtrl', function ($scope, Travelers, leafletEvents, $state) {
+.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations) {
 
-    function getMarkers(travelers){
+    function getMarkers(users){
         var markers = {};
-        for (var i = 0; i < travelers.length; i++) {
-            var traveler = travelers[i];
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
             var status = undefined;
-            var focus = false;
-            if (traveler.status) {
-                status = traveler.status;
-                focus = true;
+            if (user.status) {
+                status = user.status;
             }
             var marker = {
-                lat: traveler.latitude,
-                lng: traveler.longitude,
+                lat: user.latitude,
+                lng: user.longitude,
                 icon: {
-                    iconUrl: traveler.profilePicture,
-                    iconSize:     [38, 95], // size of the icon
+                    iconUrl: user.profilePicture.url,
+                    iconSize:     [user.profilePicture.width, user.profilePicture.height], // size of the icon
                     iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
                     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                 }
             }
 
 
-            markers[traveler.id] = marker;
+            markers[user.id] = marker;
 
         }
         return markers;
@@ -92,7 +90,7 @@ angular.module('travel.controllers', [])
     };
 
     $scope.$on('leafletDirectiveMarker.click' , function(event, args){
-        $state.go('tab.message-detail', {userId: args.markerName})
+        $state.go('tab.view-profile', {userId: args.markerName})
     });
 
 
@@ -109,26 +107,60 @@ angular.module('travel.controllers', [])
 
 
     $scope.markers = {};
-    Travelers.all().success(function(travelers){
-        $scope.markers = getMarkers(travelers);
+
+    $scope.setPosition = function(){
+        $window.navigator.geolocation.getCurrentPosition(function(position){
+            Locations.setCurrent(position.coords.latitude, position.coords.longitude);
+            $scope.$apply(function(){
+                $scope.center.lat = position.coords.latitude;
+                $scope.center.lng = position.coords.longitude;
+            });
+            Users.all().success(function(users){
+                $scope.$apply(function(){
+                    $scope.markers = getMarkers(users);
+                });
+            });
+        })
+    };
+
+    Locations.getCurrent().success(function(location){
+        if(location.latitude != null && location.longitude != null){
+            $scope.center.lat = location.latitude;
+            $scope.center.lng = location.longitude;
+            Users.all().success(function(users){
+                $scope.markers = getMarkers(users);
+            });
+        }
+        else{
+            //Display something here
+        }
     });
+
+
 
 })
 
-.controller('MessagesCtrl', function ($scope, Travelers) {
-    Travelers.all().success(function(travelers){
-        $scope.friends = travelers;
+.controller('MessagesCtrl', function ($scope, Users) {
+    Users.all().success(function(users){
+        $scope.users = users;
     });
 
 
 })
 
-.controller('MessageDetailCtrl', function ($scope, $stateParams, Travelers, Dialogs) {
-    Travelers.get($stateParams.userId).success(function (traveler){
-            $scope.friend = traveler;
+.controller('MessageDetailCtrl', function ($scope, $stateParams, Users, Dialogs) {
+    Users.get($stateParams.userId).success(function (user){
+            $scope.user = user;
         });
     $scope.messages = Dialogs.get(0).messages;
 })
 
-.controller('AccountCtrl', function ($scope, Travelers) {
+.controller('AccountCtrl', function ($scope) {
+})
+
+.controller('ViewProfileCtrl', function ($scope, $stateParams, Users) {
+    $scope.user = {};
+    Users.get($stateParams.userId).success(function (user){
+        $scope.user = user;
+    });
 });

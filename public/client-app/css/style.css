@@ -3,4 +3,22 @@
 }
 #mapWrapper{
     height:100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#updateLocationBtn{
+    position: absolute;
+    bottom: 20px;
+    z-index: 9999;
+}
+
+.leaflet-marker-icon{
+	border:2px solid #FFF;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }

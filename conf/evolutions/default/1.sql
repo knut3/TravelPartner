@@ -5,6 +5,7 @@
 
 create table picture (
   id                        bigint not null,
+  owner_id                  bigint,
   url                       varchar(255),
   width                     integer,
   height                    integer,
@@ -25,6 +26,8 @@ create sequence picture_seq;
 
 create sequence user_seq;
 
+alter table user add constraint fk_user_profilePicture_1 foreign key (profile_picture_id) references picture (id) on delete restrict on update restrict;
+create index ix_user_profilePicture_1 on user (profile_picture_id);
 
 
 
