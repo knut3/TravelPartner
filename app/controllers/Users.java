@@ -10,6 +10,7 @@ import play.mvc.Result;
 import utils.ContextArgsKeys;
 import annotations.Authorization.Authorized;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 
 @Authorized
@@ -37,6 +38,7 @@ public class Users extends Controller {
 					"You have to update your GPS coordinates in order to see other travelers");
 		
 		List<User> users = User.find
+		.fetch("profilePicture")
 		.where()
 		 .ge("latitude", user.latitude - radius)
 		 .le("latitude", user.latitude + radius)

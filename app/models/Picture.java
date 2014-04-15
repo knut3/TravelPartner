@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
 
@@ -16,14 +17,17 @@ public class Picture extends Model{
 	@Id
 	public Long id;
 	
+	public Long ownerId;
+	
 	public String url;
 	
 	public int width;
 	
 	public int height;
 	
-	public Picture(String url, int width, int height) {
+	public Picture(String url, Long ownerId, int width, int height) {
 		this.url = url;
+		this.ownerId = ownerId;
 		this.width = width;
 		this.height = height;
 	}

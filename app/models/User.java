@@ -16,7 +16,8 @@ public class User extends Model{
 	
 	public String gender;
 	
-	public Long profilePictureId;
+	@OneToOne
+	public Picture profilePicture;
 	
 	public Float latitude;
 	
@@ -24,11 +25,10 @@ public class User extends Model{
 	
 	
 	
-	public User(Long id, String firstName, String gender, Long profilePictureId) {
+	public User(Long id, String firstName, String gender) {
 		this.id = id;
 		this.firstName = firstName;
 		this.gender = gender;
-		this.profilePictureId = profilePictureId;
 		latitude = null;
 		longitude = null;
 	}
