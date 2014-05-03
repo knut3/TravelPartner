@@ -28,6 +28,7 @@
 .self-marker{
     background-color: #FF0000;
     border: none;
+    opacity: .75;
 }
 
 .user-marker-male{

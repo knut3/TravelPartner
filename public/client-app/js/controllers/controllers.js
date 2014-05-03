@@ -56,7 +56,7 @@ angular.module('travel.controllers', [])
 
 .controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster, $ionicPopup) {
 
-    function createMarkers(users){
+    function createMarkers(users, selfLatitude, selfLongitude){
         var markers = {};
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
@@ -74,6 +74,18 @@ angular.module('travel.controllers', [])
             }
             markers[user.id] = marker;
         }
+
+        // add marker of self
+        markers["self"] = {
+            layer: "self",
+            lat: selfLatitude,
+            lng: selfLongitude,
+            icon: {
+                type: 'div',
+                iconSize: [15, 15],
+                className: 'self-marker'
+            }
+        };
 
         return markers;
     }
@@ -142,18 +154,7 @@ angular.module('travel.controllers', [])
                         Users.all().success(function(users){
                             $scope.center.lat = position.coords.latitude;
                             $scope.center.lng = position.coords.longitude;
-                            $scope.markers = createMarkers(users);
-                            // add marker of self
-                            $scope.markers["self"] = {
-                                layer: "self",
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                                icon: {
-                                    type: 'div',
-                                    iconSize: [15, 15],
-                                    className: 'self-marker'
-                                }
-                            };
+                            $scope.markers = createMarkers(users, position.coords.latitude, position.coords.longitude);
                             $scope.message = "";
                             toaster.pop("success", "", "Location updated", 2500);
                         });
@@ -171,7 +172,7 @@ angular.module('travel.controllers', [])
             $scope.center.lat = location.latitude;
             $scope.center.lng = location.longitude;
             Users.all().success(function(users){
-                $scope.markers = createMarkers(users);
+                $scope.markers = createMarkers(users, location.latitude, location.longitude);
             });
         }
         else{
