@@ -25,15 +25,13 @@ angular.module('travel.controllers', [])
 .controller('LoginCtrl', function($scope, $http, $state, AuthenticationService) {
     $scope.message = '';
 
-        $scope.login = function () {
-            AuthenticationService.login();
-        };
+    $scope.login = function () {
+        AuthenticationService.login();
+    };
 
-        $scope.logout = function () {
-            AuthenticationService.logout();
-        };
-
-
+    $scope.logout = function () {
+        AuthenticationService.logout();
+    };
 
     $scope.$on('event:auth-loginRequired', function(e, rejection) {
         $scope.loginModal.show();
@@ -54,7 +52,7 @@ angular.module('travel.controllers', [])
     AuthenticationService.logout();
 })
 
-.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster, $ionicPopup) {
+.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster) {
 
     function createMarkers(users, selfLatitude, selfLongitude){
         var markers = {};
@@ -125,9 +123,9 @@ angular.module('travel.controllers', [])
 
     $scope.$on('leafletDirectiveMarker.click' , function(event, args){
         if(args.markerName === "self")
-            $state.go("tab.account");
+            $state.go("app.account");
         else {
-            $state.go('tab.view-profile', {userId: args.markerName})
+            $state.go('app.view-profile', {userId: args.markerName})
         }
     });
 

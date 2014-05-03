@@ -34,7 +34,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         url: '/map',
         views: {
             'menuContent' :{
-                templateUrl: 'assets/client-app/templates/tab-map.html'
+                templateUrl: 'assets/client-app/templates/map.html'
             }
         }
     })
@@ -42,7 +42,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         url: '/messages',
         views: {
             'menuContent' :{
-                templateUrl: 'assets/client-app/templates/tab-messages.html',
+                templateUrl: 'assets/client-app/templates/messages.html',
                 controller: 'MessagesCtrl'
         }
       }
@@ -71,7 +71,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         url: '/account',
         views: {
             'menuContent' :{
-                templateUrl: 'assets/client-app/templates/tab-account.html',
+                templateUrl: 'assets/client-app/templates/account.html',
                 controller: 'AccountCtrl'
         }
         }
