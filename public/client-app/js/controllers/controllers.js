@@ -9,8 +9,7 @@ angular.module('travel.controllers', [])
         },
         {
             scope: $scope,
-            animation: 'slide-in-up',
-            focusFirstInput: true
+            animation: 'slide-in-up'
         }
     );
     //Be sure to cleanup the modal by removing it from the DOM
@@ -55,32 +54,56 @@ angular.module('travel.controllers', [])
     $scope.contr = ""
 })
 
-.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations) {
+.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster, $ionicPopup) {
 
-    function getMarkers(users){
+    function createMarkers(users){
         var markers = {};
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
-            var status = undefined;
-            if (user.status) {
-                status = user.status;
-            }
             var marker = {
+                layer: "users",
                 lat: user.latitude,
                 lng: user.longitude,
                 icon: {
                     iconUrl: user.profilePicture.url,
                     iconSize:     [user.profilePicture.width, user.profilePicture.height], // size of the icon
                     iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    popupAnchor:  [-3, -76], // point from which the popup should open relative to the iconAnchor
+                    className: "user-marker-" + user.gender
                 }
             }
-
-
             markers[user.id] = marker;
+        }
+
+        return markers;
+    }
+
+    $scope.layers = {
+        baselayers: {
+            osm: {
+                name: 'OpenStreetMap',
+                type: 'xyz',
+                url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                layerOptions: {
+                    subdomains: ['a', 'b', 'c'],
+                    attribution: '© OpenStreetMap contributors',
+                    continuousWorld: true
+                }
+            }
+        },
+        overlays: {
+            users: {
+                name: "Users",
+                type: "markercluster",
+                visible: true
+            },
+            self: {
+                name: "Self",
+                type: "group",
+                visible: true
+            }
 
         }
-        return markers;
     }
 
     $scope.events = {
@@ -90,7 +113,11 @@ angular.module('travel.controllers', [])
     };
 
     $scope.$on('leafletDirectiveMarker.click' , function(event, args){
-        $state.go('tab.view-profile', {userId: args.markerName})
+        if(args.markerName === "self")
+            $state.go("tab.account");
+        else {
+            $state.go('tab.view-profile', {userId: args.markerName})
+        }
     });
 
 
@@ -108,18 +135,35 @@ angular.module('travel.controllers', [])
     $scope.markers = {};
 
     $scope.setPosition = function(){
-        $window.navigator.geolocation.getCurrentPosition(function(position){
-            Locations.setCurrent(position.coords.latitude, position.coords.longitude);
-            $scope.$apply(function(){
-                $scope.center.lat = position.coords.latitude;
-                $scope.center.lng = position.coords.longitude;
-            });
-            Users.all().success(function(users){
-                $scope.$apply(function(){
-                    $scope.markers = getMarkers(users);
-                });
-            });
-        })
+        $window.navigator.geolocation.getCurrentPosition(
+            function(position){
+                Locations.setCurrent(position.coords.latitude, position.coords.longitude)
+                    .then(function(){
+                        Users.all().success(function(users){
+                            $scope.center.lat = position.coords.latitude;
+                            $scope.center.lng = position.coords.longitude;
+                            $scope.markers = createMarkers(users);
+                            // add marker of self
+                            $scope.markers["self"] = {
+                                layer: "self",
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                icon: {
+                                    type: 'div',
+                                    iconSize: [15, 15],
+                                    className: 'self-marker'
+                                }
+                            };
+                            $scope.message = "";
+                            toaster.pop("success", "", "Location updated", 2500);
+                        });
+
+                    });
+
+            },
+            function(){
+                toaster.pop("error", "", "Unable to get your location");
+            })
     };
 
     Locations.getCurrent().success(function(location){
@@ -127,15 +171,15 @@ angular.module('travel.controllers', [])
             $scope.center.lat = location.latitude;
             $scope.center.lng = location.longitude;
             Users.all().success(function(users){
-                $scope.markers = getMarkers(users);
+                $scope.markers = createMarkers(users);
             });
         }
         else{
-            //Display something here
+            $scope.message = "Update your location to see travelers near you";
         }
     });
 
-
+    $scope.message = "";
 
 })
 

@@ -19,7 +19,7 @@ import play.mvc.Http;
 import play.mvc.Results;
 import play.mvc.SimpleResult;
 import play.mvc.With;
-import utils.ContextArgsKeys;
+import utils.ContextArgsKey;
 import utils.Utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -91,9 +91,9 @@ public class Authorization extends Action<Authorization.Authorized>{
   	  		
   		}
   		
-  		ctx.args.put(ContextArgsKeys.USER_ID, userId);
-  		ctx.args.put(ContextArgsKeys.ACCESS_TOKEN, accessToken);
-  		ctx.args.put(ContextArgsKeys.APP_SECRET_PROOF, appSecretProof);
+  		ctx.args.put(ContextArgsKey.USER_ID, userId);
+  		ctx.args.put(ContextArgsKey.ACCESS_TOKEN, accessToken);
+  		ctx.args.put(ContextArgsKey.APP_SECRET_PROOF, appSecretProof);
     	
     	return delegate.call(ctx);
     }

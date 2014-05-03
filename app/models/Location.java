@@ -1,10 +1,10 @@
 package models;
 
 public class Location {
-	public float longitude;
-	public float latitude;
+	public Float longitude;
+	public Float latitude;
 	
-	public Location(float latitude, float longitude) {
+	public Location(Float latitude, Float longitude) {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}

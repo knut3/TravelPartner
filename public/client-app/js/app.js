@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb'])
+angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb', 'toaster'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -60,7 +60,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
     })
 
     .state('tab.view-profile', {
-      url: 'map/:userId',
+      url: '/map/:userId',
       views: {
           'tab-map': {
               templateUrl: 'assets/client-app/templates/view-profile.html',

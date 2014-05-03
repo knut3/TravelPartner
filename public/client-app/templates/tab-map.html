@@ -2,10 +2,19 @@
 
     <ion-content scroll="false" has-header="true">
         <div id="mapWrapper" ng-controller="MapCtrl">
-            <leaflet event-broadcast="events" defaults="defaults" center="center" markers="markers"></leaflet>
-            <button ng-click="setPosition()" id="updateLocationBtn" class="button button-block button-positive">
-                Update my location
-            </button>
+            <leaflet event-broadcast="events"
+                     defaults="defaults"
+                     center="center"
+                     markers="markers"
+                     layers="layers">
+            </leaflet>
+            <div id="mapOverlay">
+                <div>{{message}}</div>
+                <button ng-click="setPosition()" id="updateLocationBtn" class="button button-block button-positive">
+                    Update my location
+                </button>
+            </div>
+
         </div>
     </ion-content>
 </ion-view>

@@ -7,7 +7,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
-import utils.ContextArgsKeys;
+import utils.ContextArgsKey;
 import annotations.Authorization.Authorized;
 
 import com.avaje.ebean.Ebean;
@@ -29,9 +29,9 @@ public class Users extends Controller {
 	
 	public static Result getUsersNearYou(){
 		
-		final float radius = 0.05f; // 3 km
+		final float radius = 0.1f; // 6 km
 		
-		Long userId = Long.parseLong((String)Http.Context.current().args.get(ContextArgsKeys.USER_ID));
+		Long userId = Long.parseLong((String)Http.Context.current().args.get(ContextArgsKey.USER_ID));
 		User user = User.find.byId(userId);
 		if(user.longitude == null || user.latitude == null)
 			return status(METHOD_NOT_ALLOWED, 

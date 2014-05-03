@@ -10,7 +10,9 @@
     right: 0;
 }
 
-#updateLocationBtn{
+#mapOverlay{
+	text-align: center;
+	width: 100%;
     position: absolute;
     bottom: 20px;
     z-index: 9999;
@@ -21,4 +23,17 @@
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
+}
+
+.self-marker{
+    background-color: #FF0000;
+    border: none;
+}
+
+.user-marker-male{
+    border-color: deeppink;
+}
+
+.user-marker-female{
+    border-color: royalblue;
 }
