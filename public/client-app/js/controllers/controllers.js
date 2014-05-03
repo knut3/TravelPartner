@@ -1,5 +1,9 @@
 angular.module('travel.controllers', [])
 
+.controller('AppCtrl', function($scope) {
+})
+
+
 .controller('MainCtrl', function($scope, $state, $ionicModal, AuthenticationService) {
 
     AuthenticationService.authHeaderUpdateFromCache();
@@ -50,10 +54,6 @@ angular.module('travel.controllers', [])
     AuthenticationService.logout();
 })
 
-.controller('MapTabCtrl', function ($scope) {
-    $scope.contr = ""
-})
-
 .controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster, $ionicPopup) {
 
     function createMarkers(users, selfLatitude, selfLongitude){
@@ -66,9 +66,8 @@ angular.module('travel.controllers', [])
                 lng: user.longitude,
                 icon: {
                     iconUrl: user.profilePicture.url,
-                    iconSize:     [user.profilePicture.width, user.profilePicture.height], // size of the icon
-                    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                    popupAnchor:  [-3, -76], // point from which the popup should open relative to the iconAnchor
+                    iconSize:     [user.profilePicture.width, user.profilePicture.height],
+                    iconAnchor:   [user.profilePicture.width/2, user.profilePicture.height/2],
                     className: "user-marker-" + user.gender
                 }
             }

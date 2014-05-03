@@ -9,7 +9,10 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
-    StatusBar.styleDefault();
+        if(window.StatusBar) {
+            // org.apache.cordova.statusbar required
+            StatusBar.styleDefault();
+        }
     });
 })
 
@@ -21,66 +24,61 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-    // setup an abstract state for the tabs directive
-    .state('tab', {
-      url: "/tab",
+    .state('app', {
+      url: "/app",
       abstract: true,
-      templateUrl: "assets/client-app/templates/tabs.html"
+      templateUrl: "assets/client-app/templates/menu.html",
+      controller: 'AppCtrl'
     })
-
-    // Each tab has its own nav history stack:
-
-    .state('tab.map', {
-      url: '/map',
-      views: {
-        'tab-map': {
-            templateUrl: 'assets/client-app/templates/tab-map.html',
-          controller: 'MapTabCtrl'
+    .state('app.map', {
+        url: '/map',
+        views: {
+            'menuContent' :{
+                templateUrl: 'assets/client-app/templates/tab-map.html'
+            }
         }
-      }
     })
-
-    .state('tab.messages', {
+    .state('app.messages', {
         url: '/messages',
-      views: {
-          'tab-messages': {
-              templateUrl: 'assets/client-app/templates/tab-messages.html',
-          controller: 'MessagesCtrl'
+        views: {
+            'menuContent' :{
+                templateUrl: 'assets/client-app/templates/tab-messages.html',
+                controller: 'MessagesCtrl'
         }
       }
     })
-    .state('tab.message-detail', {
-      url: '/messages/:userId',
-      views: {
-        'tab-messages': {
-            templateUrl: 'assets/client-app/templates/message-detail.html',
-          controller: 'MessageDetailCtrl'
+    .state('app.message-detail', {
+        url: '/messages/:userId',
+        views: {
+            'menuContent' :{
+                templateUrl: 'assets/client-app/templates/message-detail.html',
+                controller: 'MessageDetailCtrl'
+            }
         }
-      }
-    })
-
-    .state('tab.view-profile', {
-      url: '/map/:userId',
-      views: {
-          'tab-map': {
-              templateUrl: 'assets/client-app/templates/view-profile.html',
-              controller: 'ViewProfileCtrl'
-          }
-      }
     })
 
-    .state('tab.account', {
-      url: '/account',
-      views: {
-        'tab-account': {
-            templateUrl: 'assets/client-app/templates/tab-account.html',
-            controller: 'AccountCtrl'
+    .state('app.view-profile', {
+        url: '/users/:userId',
+        views: {
+            'menuContent' :{
+                templateUrl: 'assets/client-app/templates/view-profile.html',
+                controller: 'ViewProfileCtrl'
+            }
         }
-      }
+    })
+
+    .state('app.account', {
+        url: '/account',
+        views: {
+            'menuContent' :{
+                templateUrl: 'assets/client-app/templates/tab-account.html',
+                controller: 'AccountCtrl'
+        }
+        }
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/map');
+    $urlRouterProvider.otherwise('/app/map');
 
     ezfbProvider.setInitParams({
         appId: '228240120706289'});
