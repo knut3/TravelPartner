@@ -2,22 +2,46 @@ package settings;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import models.Picture;
 import models.User;
+
+import org.apache.http.HttpStatus;
+
 import play.Application;
 import play.GlobalSettings;
 import play.libs.F.Promise;
 import play.libs.Yaml;
 import play.mvc.Http.RequestHeader;
+import play.mvc.Result;
 import play.mvc.Results;
-import play.mvc.SimpleResult;
+import play.mvc.Results.Status;
+import utils.AppResources;
 
 import com.avaje.ebean.Ebean;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import exceptions.AuthorizationException;
+import exceptions.NoLocationException;
 
 public class Global extends GlobalSettings {
 
-	public void onStart(Application app) {
-        InitialData.insert(app);
+	private Injector injector;
+
+    @Override
+    public void onStart(Application app) {
+        injector = Guice.createInjector(new IocBinds());
+        //InitialData.insert(app);
+        UUID defaultProfilePictureId = UUID.randomUUID();
+        AppResources.DefaultProfilePictureId = defaultProfilePictureId;
+        new Picture(defaultProfilePictureId, "public/images/defaultProfilePicture.jpg", null, 300, 300).save();
+    }
+
+    @Override
+    public <A> A getControllerInstance(Class<A> controllerClass) throws Exception {
+        return injector.getInstance(controllerClass);
     }
     
     static class InitialData {
@@ -27,8 +51,6 @@ public class Global extends GlobalSettings {
                 
                 @SuppressWarnings("unchecked")
 				Map<String,List<Object>> all = (Map<String,List<Object>>)Yaml.load("initial-data.yml");
-
-                
 
                 // Insert projects
                 Ebean.save(all.get("pictures"));
@@ -42,20 +64,32 @@ public class Global extends GlobalSettings {
     }
 	
 	@Override
-	public Promise<SimpleResult> onBadRequest(RequestHeader request, String error) {
-		return Promise.<SimpleResult>pure(Results.badRequest("Invalid request arguments"));
+	public Promise<Result> onBadRequest(RequestHeader request, String error) {
+		return Promise.<Result>pure(Results.badRequest("Invalid request arguments"));
 	}
 	
 	@Override
-	public Promise<SimpleResult> onError(RequestHeader request, Throwable t) {
-		return Promise.<SimpleResult>pure(Results.internalServerError(
+	public Promise<Result> onError(RequestHeader request, Throwable t) {
+		
+		Status result = Results.internalServerError(
 				"The application had some problems in parsing your request. "
-				+ "Please contact us if the problem repeats itself."));
+				+ "Please contact us if the problem repeats itself.");
+		
+		if(t.getCause() instanceof AuthorizationException)
+			result = Results.unauthorized("You are not authorized for this");
+		
+		else if(t.getCause() instanceof NoLocationException)
+			result = Results.status(HttpStatus.SC_METHOD_NOT_ALLOWED, 
+					"You have to update your GPS coordinates in order to see other travelers");
+		
+		
+		
+		return Promise.<Result>pure(result);
 	}
 	
 	@Override
-	public Promise<SimpleResult> onHandlerNotFound(RequestHeader request) {
-		return Promise.<SimpleResult>pure(Results.notFound(
+	public Promise<Result> onHandlerNotFound(RequestHeader request) {
+		return Promise.<Result>pure(Results.notFound(
 				"The resource you are looking for could not be found."));
 	}
     

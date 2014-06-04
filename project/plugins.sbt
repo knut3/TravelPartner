@@ -3,4 +3,6 @@ logLevel := Level.Warn
 
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.2")
+resolvers += "Typesafe snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3-M1")

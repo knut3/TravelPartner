@@ -1,13 +1,23 @@
 package controllers;
 
-import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.main;
+import services.interfaces.IEventSourceService;
+import annotations.Authorization.Authorized;
 
-public class Application extends Controller {
+import com.google.inject.Inject;
 
-	public static Result index()  {	 
-  		return ok(main.render());
-  }
+public class Application extends BaseController {
+
+	@Inject
+	IEventSourceService eventSourceService;
+	
+	public Result index()  {	 
+  		return ok(views.html.main.render());
+	}
+	
+	@Authorized
+	public Result subscribeEvents() {
+	    return ok(eventSourceService.subscribe(getCurrentUserId(), request().remoteAddress()));
+	}
 
 }

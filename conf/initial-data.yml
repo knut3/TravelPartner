@@ -7,7 +7,7 @@ users:
         id:      1
         firstName:  Stian
         profilePicture: !!models.Picture
-                            id:   998
+                            id: !!java.util.UUID(2,3)
         latitude: 59.75
         longitude: 10.3936
         gender: male
@@ -16,7 +16,7 @@ users:
         id: 2
         firstName:  Eva
         profilePicture: !!models.Picture
-                            id:   999
+                            id: !!java.util.UUID(2,3)
         latitude: 59.7475
         longitude: 10.41
         gender: female
@@ -25,7 +25,7 @@ users:
         id: 3
         firstName:  Kim
         profilePicture: !!models.Picture
-                            id:   999
+                            id: !!java.util.UUID(2,3)
         latitude: 59.744167
         longitude: 10.34
         gender: female
@@ -34,7 +34,7 @@ users:
         id: 4
         firstName:  Jørgen
         profilePicture: !!models.Picture
-                            id:   999
+                            id: !!java.util.UUID(2,3)
         latitude: 59.78
         longitude: 10.35
         gender: male
@@ -43,7 +43,7 @@ users:
         id: 5
         firstName:  Karsten
         profilePicture: !!models.Picture
-                            id:   999
+                            id: !!java.util.UUID(2,3)
         latitude: 59.735
         longitude: 10.33
         gender: male
@@ -53,14 +53,14 @@ users:
 pictures:
 
     - !!models.Picture
-        id:         998
+        id: !!java.util.UUID(2,3)
         url:        https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/t1.0-1/c78.4.101.101/s50x50/555215_10153057005145385_1038569793_a.jpg   
         ownerId:      1
         height:     50
         width:      50
         
     - !!models.Picture
-        id:         999
+        id: !!java.util.UUID(4,3)
         url:        https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/t1.0-1/c78.4.101.101/s50x50/555215_10153057005145385_1038569793_a.jpg   
         ownerId:      2
         height:     50

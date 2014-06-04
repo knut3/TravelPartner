@@ -4,7 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
+// 'starter.controllers' is found in viewProfileCtrl.js
+
+angular.module('travel.controllers', [])
 angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb', 'toaster'])
 
 .run(function($ionicPlatform) {
@@ -21,38 +23,20 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
+
   $stateProvider
 
     .state('app', {
       url: "/app",
       abstract: true,
       templateUrl: "assets/client-app/templates/menu.html",
-      controller: 'AppCtrl'
+      controller: 'MainCtrl'
     })
     .state('app.map', {
         url: '/map',
         views: {
             'menuContent' :{
                 templateUrl: 'assets/client-app/templates/map.html'
-            }
-        }
-    })
-    .state('app.messages', {
-        url: '/messages',
-        views: {
-            'menuContent' :{
-                templateUrl: 'assets/client-app/templates/messages.html',
-                controller: 'MessagesCtrl'
-        }
-      }
-    })
-    .state('app.message-detail', {
-        url: '/messages/:userId',
-        views: {
-            'menuContent' :{
-                templateUrl: 'assets/client-app/templates/message-detail.html',
-                controller: 'MessageDetailCtrl'
             }
         }
     })

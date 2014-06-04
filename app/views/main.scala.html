@@ -42,16 +42,21 @@
 	
     <!-- your app's js -->
     <script src="assets/client-app/js/app.js"></script>
-    <script src="assets/client-app/js/controllers/controllers.js"></script>
+    <script src="assets/client-app/js/controllers/mainCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/loginCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/signOutCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/mapCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/accountCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/messagesCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/viewProfileCtrl.js"></script>
+    <script src="assets/client-app/js/controllers/conversationCtrl.js"></script>
     <script src="assets/client-app/js/services/services.js"></script>
     <script src="assets/client-app/js/directives/directives.js"></script>
 </head>
 <body ng-app="travel">
 	
-    <div ng-controller="MainCtrl">
-	    <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+	    <toaster-container toaster-options="{'time-out': 3000, 'position-class': 'toast-center'}"></toaster-container>
 
 	    <ion-nav-view></ion-nav-view>
-    </div>
 </body>
 </html>

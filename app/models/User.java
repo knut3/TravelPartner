@@ -7,7 +7,7 @@ import play.db.ebean.Model;
 @Entity
 public class User extends Model{
 
-	private static final long serialVersionUID = 4091781878828023687L;
+	private static final long serialVersionUID = 3L;
 
 	@Id
 	public Long id;
@@ -18,10 +18,12 @@ public class User extends Model{
 	
 	@OneToOne
 	public Picture profilePicture;
-	
+		
 	public Float latitude;
 	
 	public Float longitude;
+	
+	public String city;
 	
 	
 	
@@ -31,11 +33,14 @@ public class User extends Model{
 		this.gender = gender;
 		latitude = null;
 		longitude = null;
+		city = null;
+		
 	}
 	
-	public void setLocation(float latitude, float longitude){
+	public void setLocation(float latitude, float longitude, String city){
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.city = city;
 	}
 
 
