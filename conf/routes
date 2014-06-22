@@ -12,6 +12,8 @@ POST	/users/:userId/messages		@controllers.Messages.send(userId:Long)
 
 GET		/me/locations/current		@controllers.Locations.getCurrentLocation
 POST	/me/locations/current		@controllers.Locations.setLocation(lat: Float, lng: Float)
+GET		/me/conversations			@controllers.Messages.getAllConversations
+GET		/me/conversations/:userId	@controllers.Messages.getConversation(userId:Long)
 
 
 # Map static resources from the /public folder to the /assets URL path

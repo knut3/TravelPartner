@@ -4,7 +4,9 @@ import java.util.List;
 
 import exceptions.AuthorizationException;
 import models.Message;
-import models.view.MessageNotification;
+import models.view.ConversationDetailsViewModel;
+import models.view.ConversationBriefViewModel;
+import models.view.MessageViewModel;
 
 
 
@@ -12,8 +14,8 @@ public interface IMessageService {
 	
 	void send(Message message) throws AuthorizationException;
 
-	List<Message> getConversation(long userId, long anotherUserId);
+	ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId);
 
-	List<MessageNotification> getAllConversations(long userId);
+	List<ConversationBriefViewModel> getAllConversations(long userId);
 	
 }

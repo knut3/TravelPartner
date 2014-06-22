@@ -51,6 +51,26 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         }
     })
 
+    .state('app.conversations', {
+        url: '/conversations',
+        views: {
+          'menuContent' :{
+              templateUrl: 'assets/client-app/templates/conversations.html',
+              controller: 'ConversationsCtrl'
+          }
+        }
+    })
+
+    .state('app.conversations-details', {
+      url: '/conversations/:userId',
+      views: {
+          'menuContent' :{
+              templateUrl: 'assets/client-app/templates/conversation.html',
+              controller: 'ConversationCtrl'
+          }
+      }
+    })
+
     .state('app.account', {
         url: '/account',
         views: {

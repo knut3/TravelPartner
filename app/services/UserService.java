@@ -83,8 +83,7 @@ public class UserService implements IUserService{
   			int width = pic.get("width").asInt();
   			int height = pic.get("height").asInt();
   			profilePicture = new Picture(
-  					imageId, 
-  					src,
+  					imageId.toString(), 
   					newUser.id, 
   					width,
   					height);
@@ -110,8 +109,7 @@ public class UserService implements IUserService{
   			int width = pic.get("width").asInt();
   			int height = pic.get("height").asInt();
   			new Picture(
-  					imageId,
-  					src, 
+  					imageId.toString(),
   					newUser.id, 
   					width, 
   					height)
@@ -151,7 +149,9 @@ public class UserService implements IUserService{
 		User user = User.find.byId(userId);
 		User anotherUser = User.find.byId(anotherUserId);
 		
-		if(user.latitude == null || user.longitude == null)
+		if(	user == null || anotherUser == null
+			|| user.latitude == null || user.longitude == null
+			|| anotherUser.latitude == null || anotherUser.longitude == null)
 			return false;
 		
 		boolean withinLatitudeRange = user.latitude >= (anotherUser.latitude - RADIUS) 

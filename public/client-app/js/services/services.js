@@ -82,24 +82,24 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
     }
 })
 
-.factory('Dialogs', function() {
-    // Might use a resource here that returns a JSON array
-
-    // Some fake testing data
-    var dialogs = [
-      { id: 0, messages: [{ me: false, message: "Hi, friend!" }, { me: true, message: "Halla" }, { me: false, message: "But how the hell are you doing, bro?" }] },
-      { id: 1, messages: [{ me: false, message: "Hi, friend!" }, { me: true, message: "Halla" }, { me: false, message: "But how the hell are you doing, bro?" }] },
-      { id: 2, messages: [{ me: false, message: "Hi, friend!" }, { me: true, message: "Halla" }, { me: false, message: "But how the hell are you doing, bro?" }] },
-      { id: 3, messages: [{ me: false, message: "Hi, friend!" }, { me: true, message: "Halla" }, { me: false, message: "But how the hell are you doing, bro?" }] }
-    ];
-
+.factory('Conversations', function($http) {
     return {
         all: function() {
-            return dialogs;
+            return $http.get("me/conversations");
         },
-        get: function (travelerId) {
+        get: function (id) {
             // Simple index lookup
-            return dialogs[travelerId];
+            return $http.get("me/conversations/" + id);
+        },
+        sendMessage: function(userId, message){
+            return $http({
+                url: "users/"+ userId + "/messages",
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=UTF-8"
+                },
+                data: message
+            });
         }
     }
 });

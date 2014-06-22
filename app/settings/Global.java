@@ -33,10 +33,8 @@ public class Global extends GlobalSettings {
     @Override
     public void onStart(Application app) {
         injector = Guice.createInjector(new IocBinds());
-        //InitialData.insert(app);
-        UUID defaultProfilePictureId = UUID.randomUUID();
-        AppResources.DefaultProfilePictureId = defaultProfilePictureId;
-        new Picture(defaultProfilePictureId, "public/images/defaultProfilePicture.jpg", null, 300, 300).save();
+        InitialData.insert(app);
+        AppResources.DefaultProfilePictureId = "default-profile-pic";
     }
 
     @Override
@@ -57,6 +55,8 @@ public class Global extends GlobalSettings {
                 
                 // Insert users first
                 Ebean.save(all.get("users"));
+                
+                //Ebean.save(all.get("messages"));
                 
             }
         }

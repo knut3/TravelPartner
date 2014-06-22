@@ -1,11 +1,18 @@
 package controllers;
 
+import java.util.List;
+
 import models.Message;
+import models.view.ConversationDetailsViewModel;
+import models.view.ConversationBriefViewModel;
+import models.view.MessageViewModel;
+import play.libs.Json;
 import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import services.interfaces.IMessageService;
 import annotations.Authorization.Authorized;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 
 import exceptions.AuthorizationException;
@@ -25,14 +32,14 @@ public class Messages extends BaseController {
 	
 	public Result getConversation(long userId){		
 		
-		messageService.getConversation(this.getCurrentUserId(), userId);
-		return ok();
+		ConversationDetailsViewModel msgs = messageService.getConversation(this.getCurrentUserId(), userId);
+		return ok(Json.toJson(msgs));
 	}
 	
 	public Result getAllConversations(){		
 		
-		messageService.getAllConversations(this.getCurrentUserId());
-		return ok();
+		List<ConversationBriefViewModel> messages = messageService.getAllConversations(this.getCurrentUserId());
+		return ok(Json.toJson(messages));
 	}
 	
 	

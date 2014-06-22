@@ -1,6 +1,8 @@
 package models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
 
@@ -26,6 +28,9 @@ public class User extends Model{
 	public String city;
 	
 	
+	public User(Long id){
+		this.id = id;
+	}
 	
 	public User(Long id, String firstName, String gender) {
 		this.id = id;
@@ -42,10 +47,9 @@ public class User extends Model{
 		this.longitude = longitude;
 		this.city = city;
 	}
-
-
-
+	
 	public static Finder<Long,User> find = new Finder<Long,User>(
-		    Long.class, User.class
+			Long.class, User.class
 	); 
+
 }

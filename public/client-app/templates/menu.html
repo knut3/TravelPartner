@@ -20,7 +20,7 @@
                 <ion-item nav-clear menu-close icon="icon ion-map" href="#/app/map">
                     Map
                 </ion-item>
-                <ion-item nav-clear menu-close icon="icon ion-chatbox" href="#/app/messages">
+                <ion-item nav-clear menu-close icon="icon ion-chatboxes" href="#/app/conversations">
                     Messages
                 </ion-item>
                 <ion-item nav-clear menu-close icon="icon ion-gear-b" href="#/app/account">
@@ -29,12 +29,18 @@
             </ion-list>
         </ion-content>
     </ion-side-menu>
-    <ion-side-menu side="right">
+    <ion-side-menu side="right" ng-controller="ConversationsCtrl">
         <header class="bar bar-header bar-stable">
             <h1 class="title">Conversations</h1>
         </header>
         <ion-content class="has-header">
-
+            <ion-list>
+                <ion-item ng-repeat="conversation in conversations" class="item item-avatar" href="#/app/conversations/{{conversation.userId}}">
+                    <img ng-src="assets/images/small/{{conversation.userPictureId}}.jpg">
+                    <h2>{{conversation.userName}}</h2>
+                    <p>{{conversation.latestMessage.message}}</p>
+                </ion-item>
+            </ion-list>
         </ion-content>
     </ion-side-menu>
 </ion-side-menus>

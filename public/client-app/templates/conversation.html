@@ -1,0 +1,32 @@
+
+<ion-view title="{{conversation.userName}}">
+  <ion-content has-header="true" padding="true" delegate-handle="conversationScroll">
+      <div class="list">
+
+          <div ng-repeat="message in conversation.messages">
+              <div class="item" ng-if="message.sentByMe" style="background-color:#dde1f5">
+                  <h2>Me</h2>
+                  <p>{{message.message}}</p>
+              </div>
+              <div class="item"  ng-if="!message.sentByMe" style="text-align:right">
+                  <img ng-src="assets/images/small/{{conversation.userPictureId}}.jpg" >
+                  <h2>{{conversation.userName}}</h2>
+                  <p>{{message.message}}</p>
+              </div>
+          </div>
+      </div>
+
+    </ion-content>
+    <ion-footer-bar class="bar-subfooter">
+    <form style="width: 100%">
+        <div class="list">
+            <div class="item item-input-inset">
+                <label class="item item-input-wrapper">
+                    <input type="text" placeholder="Write a message..." ng-model="sendForm.message" autofocus>
+                </label>
+                <button ng-click="sendForm.send()" class="button icon ion-paper-airplane"></button>
+            </div>
+        </div>
+    </form>
+    </ion-footer-bar>
+</ion-view>

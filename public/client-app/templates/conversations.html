@@ -1,0 +1,14 @@
+<ion-view title="Conversations">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <ion-list>
+            <ion-item ng-repeat="conversation in conversations" class="item item-avatar" href="#/app/conversations/{{conversation.userId}}">
+                <img ng-src="assets/images/small/{{conversation.userPictureId}}.jpg">
+                <h2>{{conversation.userName}}</h2>
+                <p>{{conversation.latestMessage.message}}</p>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

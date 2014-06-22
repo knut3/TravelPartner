@@ -65,9 +65,7 @@ angular.module('travel.controllers')
                             var RADIUS = 0.1;
                             var latitude = position.coords.latitude;
                             var longitude = position.coords.longitude;
-                            $scope.center.lat = latitude;
-                            $scope.center.lng = longitude;
-                            $scope.center = {};
+                            $scope.center = {lat: latitude, lon: longitude};
                             $scope.markers = createMarkers(users, latitude, longitude);
                             $scope.message = "";
                             $scope.maxbounds = leafletBoundsHelpers.createBoundsFromArray([

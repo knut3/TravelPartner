@@ -1,6 +1,11 @@
 package models;
 
-public class Location {
+import play.db.ebean.Model;
+
+public class Location extends Model{
+
+	private static final long serialVersionUID = 276570408802260536L;
+	
 	public Float longitude;
 	public Float latitude;
 	public String city;
