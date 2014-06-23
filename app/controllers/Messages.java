@@ -30,7 +30,7 @@ public class Messages extends BaseController {
 		return ok();
 	}
 	
-	public Result getConversation(long userId){		
+	public Result getConversation(long userId) throws AuthorizationException{		
 		
 		ConversationDetailsViewModel msgs = messageService.getConversation(this.getCurrentUserId(), userId);
 		return ok(Json.toJson(msgs));
@@ -40,6 +40,11 @@ public class Messages extends BaseController {
 		
 		List<ConversationBriefViewModel> messages = messageService.getAllConversations(this.getCurrentUserId());
 		return ok(Json.toJson(messages));
+	}
+	
+	public Result getUnreadMessageCount(){
+		int unreadMsgs = messageService.getUnreadMessageCount(this.getCurrentUserId());
+		return ok(String.valueOf(unreadMsgs));
 	}
 	
 	

@@ -1,5 +1,5 @@
 angular.module('travel.controllers')
-.controller('MainCtrl', function($scope, $state, $ionicModal, AuthenticationService, EventSourceService, toaster) {
+.controller('MainCtrl', function($scope, $state, $ionicModal, AuthenticationService, EventSourceService, LocalEvents, toaster, Conversations, $window) {
 
 
         AuthenticationService.authHeaderUpdateFromCache();
@@ -14,10 +14,26 @@ angular.module('travel.controllers')
             }
         );
 
+        Conversations.getUnreadMessageCount()
+            .success(function(count){
+                $scope.unreadMessageCount = count;
+            })
+            .error(function(){
+                alert("unable to fetch unread msg count");
+            });
+
 
         $scope.$on(EventSourceService.Events.NEW_MESSAGE, function(event, data){
-            toaster.pop("success", "", "New message from " + data.senderName, 2500);
-        })
+            //Increment the unread messages counter if the user is not already
+            //looking at the conversation
+            if($window.location.hash !== "#/app/conversations/"+data.userId)
+                $scope.unreadMessageCount++;
+            toaster.pop("info", "", "New message from " + data.userName, 2500);
+        });
+
+        $scope.$on(LocalEvents.MESSAGES_READ, function(count){
+           $scope.unreadMessageCount -= count;
+        });
 
 
         //Cleanup the modal by removing it from the DOM

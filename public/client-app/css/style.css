@@ -38,3 +38,8 @@
 .user-marker-female{
     border-color: deeppink;
 }
+
+.on-top-of-icon{
+    position: relative;
+    right: 20%;
+}

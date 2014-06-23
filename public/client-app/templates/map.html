@@ -1,16 +1,10 @@
 <ion-view title="Map">
-    <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
-
     <ion-content scroll="false" has-header="true">
         <div id="mapWrapper" ng-controller="MapCtrl">
-            <leaflet event-broadcast="events"
-                     defaults="defaults"
+            <leaflet defaults="defaults"
                      center="center"
                      markers="markers"
-                     layers="layers"
-                     maxbounds="maxbounds">
+                     layers="layers">
             </leaflet>
             <div id="mapOverlay">
                 <div>{{message}}</div>

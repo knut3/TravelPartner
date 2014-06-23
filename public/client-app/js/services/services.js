@@ -29,7 +29,7 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
     };
     return service;
 })
-.factory('EventSourceService', function(Locations, $window, LocalStorageKeys, $rootScope) {
+.factory('EventSourceService', function(Locations, $window, LocalStorageKeys, $rootScope, toaster) {
 
     var serverEvents = { NEW_MESSAGE: "new-message" };
     var serverEventsHandled = [ serverEvents.NEW_MESSAGE ];
@@ -39,6 +39,11 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
         Events: serverEvents,
 
         setup: function(){
+            if(typeof(EventSource) === "undefined"){
+                toaster.pop("error", "", "Server-sent events are not supported by your browser. " +
+                    "It is highly suggested that you change to a browser that supports it, i.e. Firefox or Chrome");
+                return;
+            }
             var eventSource = new EventSource("/subscribe-events?accessToken="+$window.localStorage[LocalStorageKeys.ACCESS_TOKEN]);
 
             for(var i = 0; i < serverEventsHandled.length; i++)
@@ -78,7 +83,15 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
 .factory('LocalStorageKeys', function() {
 
     return {
-        ACCESS_TOKEN: "accessToken"
+        ACCESS_TOKEN: "accessToken",
+        CURRENT_ZOOM_LEVEL: "currentZoomLevel"
+    }
+})
+
+.factory('LocalEvents', function() {
+
+    return {
+        MESSAGES_READ: "messagesRead"
     }
 })
 
@@ -100,6 +113,9 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
                 },
                 data: message
             });
+        },
+        getUnreadMessageCount: function(){
+            return $http.get("me/messages/unread/count");
         }
     }
 });

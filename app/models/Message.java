@@ -21,6 +21,7 @@ public class Message extends Model{
 	public User recipient;
 	public String message;
 	public Timestamp dateTimeSent;
+	public boolean isRead;
 	
 	
 	public Message(long senderId, long recipientId, String message) {
@@ -28,6 +29,7 @@ public class Message extends Model{
 		this.recipient = new User(recipientId);
 		this.message = message;
 		dateTimeSent = Timestamp.valueOf(LocalDateTime.now());
+		isRead = false;
 	}
 	
 	public static Finder<Long,Message> find = new Finder<Long,Message>(

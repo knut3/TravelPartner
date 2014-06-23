@@ -1,0 +1,58 @@
+
+<ion-side-menus>
+    <ion-pane ion-side-menu-content>
+        <ion-nav-bar class="bar-stable nav-title-slide-ios7">
+            <ion-nav-back-button class="button-clear"><i class="icon ion-chevron-left"></i> Back</ion-nav-back-button>
+        </ion-nav-bar>
+
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        </ion-nav-buttons>
+
+        <ion-nav-buttons side="right">
+            <button menu-toggle="right" class="button button-icon icon ion-chatboxes">
+                <span ng-if="unreadMessageCount > 0" class="badge badge-assertive on-top-of-icon">{{unreadMessageCount}}</span>
+            </button>
+        </ion-nav-buttons>
+
+        <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+    </ion-pane>
+
+    <ion-side-menu side="left">
+        <header class="bar bar-header bar-stable">
+            <h1 class="title">Menu</h1>
+        </header>
+        <ion-content class="has-header">
+            <ion-list>
+                <ion-item nav-clear menu-close class="item-icon-right" href="#/app/map">
+                    <i class="icon ion-map"></i>
+                    Map
+                </ion-item>
+                <ion-item menu-toggle="right" class="item-icon-right" href="#">
+                    <i class="icon ion-chatboxes"></i>
+                    Conversations
+                </ion-item>
+                <ion-item nav-clear menu-close class="item-icon-right" href="#/app/account">
+                    <i class="icon ion-gear-b"></i>
+                    Account
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+    <ion-side-menu side="right">
+        <header class="bar bar-header bar-stable">
+            <h1 class="title">Conversations</h1>
+        </header>
+        <ion-content class="has-header" ng-controller="ConversationsCtrl">
+            <ion-list>
+                <ion-item ng-click="conversation.latestMessage.isRead = true" ng-repeat="conversation in conversations" nav-clear menu-close class="item item-avatar" href="#/app/conversations/{{conversation.userId}}">
+                    <img ng-src="assets/images/small/{{conversation.userPictureId}}.jpg">
+                    <span class="item-note">{{conversation.latestMessage.dateTimeSent}}</span>
+                    <h2>{{conversation.userName}}</h2>
+                    <p>{{conversation.latestMessage.message}}</p>
+                    <p ng-if="!conversation.latestMessage.isRead">unread</p>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+</ion-side-menus>

@@ -14,8 +14,10 @@ public interface IMessageService {
 	
 	void send(Message message) throws AuthorizationException;
 
-	ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId);
+	ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) throws AuthorizationException;
 
 	List<ConversationBriefViewModel> getAllConversations(long userId);
+	
+	int getUnreadMessageCount(long userId);
 	
 }

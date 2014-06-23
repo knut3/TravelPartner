@@ -29,7 +29,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
     .state('app', {
       url: "/app",
       abstract: true,
-      templateUrl: "assets/client-app/templates/menu.html",
+      templateUrl: "assets/client-app/templates/main.html",
       controller: 'MainCtrl'
     })
     .state('app.map', {
@@ -48,16 +48,6 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
                 templateUrl: 'assets/client-app/templates/view-profile.html',
                 controller: 'ViewProfileCtrl'
             }
-        }
-    })
-
-    .state('app.conversations', {
-        url: '/conversations',
-        views: {
-          'menuContent' :{
-              templateUrl: 'assets/client-app/templates/conversations.html',
-              controller: 'ConversationsCtrl'
-          }
         }
     })
 

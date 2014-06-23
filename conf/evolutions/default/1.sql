@@ -9,6 +9,7 @@ create table message (
   recipient_id              bigint,
   message                   varchar(255),
   date_time_sent            timestamp,
+  is_read                   boolean,
   constraint pk_message primary key (id))
 ;
 

@@ -60,12 +60,12 @@ public class MessageService implements IMessageService{
 		messageNotification.userName = sender.firstName;
 		messageNotification.userId = sender.id;
 		messageNotification.userPictureId = sender.profilePicture.id;
-		messageNotification.message = message.message;
+		messageNotification.message = MessageViewModel.fromMessage(message, message.recipient.id);
 		eventSourceService.sendEvent(message.recipient.id, Json.toJson(messageNotification), EventNames.NEW_MESSAGE);		
 	}
 
 	@Override
-	public ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) {
+	public ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) throws AuthorizationException {
 		List<Message> messages = Message.find
 			.where()
 			.or(
@@ -74,6 +74,13 @@ public class MessageService implements IMessageService{
 				)
 			.findList();
 		
+		if(messages.isEmpty()){
+			boolean withinRange = userService.areUsersWithinRange(currentUserId, anotherUserId);
+			if(!withinRange)
+				throw new AuthorizationException();
+		}
+			
+		
 		ConversationDetailsViewModel result = new ConversationDetailsViewModel();
 		User anotherUser = User.find.byId(anotherUserId);
 		result.userId = anotherUserId;
@@ -81,6 +88,11 @@ public class MessageService implements IMessageService{
 		result.userPictureId = anotherUser.profilePicture.id;
 		for (Message message : messages) {
 			result.messages.add(MessageViewModel.fromMessage(message, currentUserId));
+			if(message.sender.id != currentUserId && !message.isRead){
+				message.isRead = true;
+				message.save();
+				result.unreadMessageCount++;
+			}
 		}
 		
 		return result;
@@ -138,6 +150,16 @@ public class MessageService implements IMessageService{
 		
 		return result;
 		
+		
+	}
+
+	@Override
+	public int getUnreadMessageCount(long userId) {
+		
+		return Message.find.where()
+			.eq("recipient.id", userId)
+			.eq("isRead", false)
+			.findRowCount();
 		
 	}
 

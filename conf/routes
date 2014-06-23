@@ -14,6 +14,7 @@ GET		/me/locations/current		@controllers.Locations.getCurrentLocation
 POST	/me/locations/current		@controllers.Locations.setLocation(lat: Float, lng: Float)
 GET		/me/conversations			@controllers.Messages.getAllConversations
 GET		/me/conversations/:userId	@controllers.Messages.getConversation(userId:Long)
+GET		/me/messages/unread/count	@controllers.Messages.getUnreadMessageCount
 
 
 # Map static resources from the /public folder to the /assets URL path
