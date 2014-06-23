@@ -1,5 +1,5 @@
 angular.module('travel.controllers')
-.controller('ConversationsCtrl', function ($scope, Conversations, EventSourceService, LocalEvents) {
+.controller('ConversationsCtrl', function ($scope, Conversations, EventSourceService, LocalEvents, $window) {
     Conversations.all().success(function(conversations){
         $scope.conversations = conversations;
     });
@@ -16,6 +16,13 @@ angular.module('travel.controllers')
 
     //Update the conversations list on new message
     $scope.$on(EventSourceService.Events.NEW_MESSAGE, function(event, data) {
+
+        // The new message is unread unless the user is currently watching the
+        // conversation
+        var isRead = false;
+        if($window.location.hash === "#/app/conversations/"+data.userId)
+            isRead = true;
+
         var conversationBrief = {
             userId: data.userId,
             userName: data.userName,
@@ -24,7 +31,7 @@ angular.module('travel.controllers')
                 message: data.message.message,
                 sentByMe: false,
                 dateTimeSent: data.message.dateTimeSent,
-                isRead: false
+                isRead: isRead
             }
         };
 
