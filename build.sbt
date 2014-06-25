@@ -11,7 +11,8 @@ libraryDependencies ++= Seq(
   javaWs,
   cache,
   "com.google.inject" % "guice" % "4.0-beta4",
-  "org.imgscalr" % "imgscalr-lib" % "4.2"
+  "org.imgscalr" % "imgscalr-lib" % "4.2",
+  "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
   )
 
 play.Project.playJavaSettings :+ (Keys.fork in (Test) := false)
