@@ -2,7 +2,7 @@ import play.Project._
 
 name := """Travel Partner"""
 
-version := "1.0-SNAPSHOT"
+version := "0.1"
 
 
 libraryDependencies ++= Seq(
