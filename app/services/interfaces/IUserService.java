@@ -2,6 +2,7 @@ package services.interfaces;
 
 import java.util.List;
 
+import play.libs.F.Promise;
 import exceptions.NoLocationException;
 import models.User;
 
@@ -14,8 +15,10 @@ public interface IUserService {
 	 * @param accessToken Facebook access token
 	 * 
 	 * @param appSecretProof App secret identifying this app
+	 * @param userId 
+	 * @return 
 	 */
-	void createUser(String accessToken, String appSecretProof);
+	Promise<Void> createUser(String accessToken, String appSecretProof, long userId);
 	
 	List<User> getUsersNearby(long userId) throws NoLocationException;
 	

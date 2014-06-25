@@ -6,7 +6,7 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in viewProfileCtrl.js
 
-angular.module('travel.controllers', [])
+angular.module('travel.controllers', []);
 angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb', 'toaster'])
 
 .run(function($ionicPlatform) {

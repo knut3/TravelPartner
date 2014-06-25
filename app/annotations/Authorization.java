@@ -36,7 +36,7 @@ public class Authorization extends Action<Authorization.Authorized>{
 		
     public Promise<Result> call(Http.Context ctx) throws Throwable {
 		String authHeader = ctx.request().getHeader("Authorization");
-		String accessToken = null;
+		final String accessToken;
 		
 		if(authHeader != null){
 			authHeader = authHeader.trim();
@@ -61,22 +61,30 @@ public class Authorization extends Action<Authorization.Authorized>{
 		idRequest.setQueryParameter("appsecret_proof", appSecretProof);
 		idRequest.setQueryParameter("fields", "id");
   		Promise<WSResponse> idResponsePromise = idRequest.get();
-  		JsonNode idResp = idResponsePromise.get(5000).asJson();
-  		if(!idResp.has("id"))
-  			return Promise.<Result>pure(Results.unauthorized("Invalid access token"));
-  		String userId = idResp.get("id").asText();
-	  		
-  		boolean userExists 
-        = (User.find.where().idEq(userId).findRowCount() == 1) ? true : false;
   		
-  		if(!userExists){
-  			userService.createUser(accessToken, appSecretProof);  	  		
+  		return idResponsePromise.flatMap( idResp -> {
+  			
+  			JsonNode idRespJson = idResp.asJson();
+  			
+  	  		if(!idRespJson.has("id"))
+  	  			return Promise.<Result>pure(Results.unauthorized("Invalid access token"));
+  	  		String userId = idRespJson.get("id").asText();
+  		  		
+  	  		ctx.args.put(ContextArgsKey.USER_ID, userId);
+  	  		ctx.args.put(ContextArgsKey.ACCESS_TOKEN, accessToken);
+  	  		ctx.args.put(ContextArgsKey.APP_SECRET_PROOF, appSecretProof);
+  	    	  	
+  	  		boolean userExists 
+	        = (User.find.where().idEq(userId).findRowCount() == 1) ? true : false;
+  	  		
+  	  		if(!userExists){
+	  			Promise<Result> result = userService.createUser(accessToken, appSecretProof, Long.parseLong(userId)).flatMap( nothing -> {
+	  				return delegate.call(ctx);
+	  			} );
+	  			return result;
+	  		}
+  	  		else return delegate.call(ctx);
   		}
-  		
-  		ctx.args.put(ContextArgsKey.USER_ID, userId);
-  		ctx.args.put(ContextArgsKey.ACCESS_TOKEN, accessToken);
-  		ctx.args.put(ContextArgsKey.APP_SECRET_PROOF, appSecretProof);
-    	
-    	return delegate.call(ctx);
+  		);
     }
 }

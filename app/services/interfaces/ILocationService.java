@@ -1,7 +1,9 @@
 package services.interfaces;
 
+import play.libs.F.Promise;
+
 public interface ILocationService {
 	
-	String getCityByCoordinates(float latitude, float longitude);
+	Promise<String> getCityByCoordinates(float latitude, float longitude);
 	
 }
