@@ -126,7 +126,7 @@ angular.module('travel.controllers')
                 lat: user.latitude,
                 lng: user.longitude,
                 icon: {
-                    iconUrl: "assets/images/small/" + user.profilePicture.id + ".jpg",
+                    iconUrl: "images/small/" + user.profilePicture.id,
                     iconSize:     [50, 50],
                     iconAnchor:   [25, 25],
                     className: "user-marker-" + user.gender

@@ -46,7 +46,7 @@
         <ion-content class="has-header" ng-controller="ConversationsCtrl">
             <ion-list>
                 <ion-item ng-click="conversation.latestMessage.isRead = true" ng-repeat="conversation in conversations" nav-clear menu-close class="item item-avatar" href="#/app/conversations/{{conversation.userId}}">
-                    <img ng-src="assets/images/small/{{conversation.userPictureId}}.jpg">
+                    <img ng-src="images/small/{{conversation.userPictureId}}">
                     <span class="item-note">{{conversation.latestMessage.dateTimeSent}}</span>
                     <h2>{{conversation.userName}}</h2>
                     <p>{{conversation.latestMessage.message}}</p>
