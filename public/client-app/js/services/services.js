@@ -41,7 +41,7 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
         setup: function(){
             if(typeof(EventSource) === "undefined"){
                 toaster.pop("error", "", "Server-sent events are not supported by your browser. " +
-                    "It is highly suggested that you change to a browser that supports it, i.e. Firefox or Chrome");
+                    "It is highly suggested that you change to a browser that supports it, i.e. Firefox or Chrome", 5000);
                 return;
             }
             var eventSource = new EventSource("/subscribe-events?accessToken="+$window.localStorage[LocalStorageKeys.ACCESS_TOKEN]);
