@@ -19,7 +19,7 @@ angular.module('travel.controllers')
                 $scope.unreadMessageCount = count;
             })
             .error(function(){
-                alert("unable to fetch unread msg count");
+                console.log("unable to fetch unread msg count");
             });
 
 

@@ -19,7 +19,7 @@ angular.module('travel.controllers')
                 $scope.$emit(LocalEvents.MESSAGES_READ, conversation.unreadMessageCount, $stateParams.userId);
         })
         .error(function(){
-            alert("unable to fetch conversation");
+            console.log("unable to fetch conversation");
         });
 
     // Update the message list whenever a new message arrives

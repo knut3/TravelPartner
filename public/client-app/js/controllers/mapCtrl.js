@@ -67,11 +67,11 @@ angular.module('travel.controllers')
         $window.localStorage[LocalStorageKeys.CURRENT_ZOOM_LEVEL] = args.leafletEvent.target._zoom;
     });
 
-    $scope.$on('leafletDirectiveMarker.click' , function(event, args){
-        if(args.markerName !== "self"){
-            $state.go('app.view-profile', {userId: args.markerName})
-        }
-    });
+    //$scope.$on('leafletDirectiveMarker.click' , function(event, args){
+    //    if(args.markerName !== "self"){
+    //        $state.go('app.view-profile', {userId: args.markerName})
+    //    }
+    //});
     $scope.setPosition = function(){
         $window.navigator.geolocation.getCurrentPosition(
             function(position){
@@ -125,13 +125,20 @@ angular.module('travel.controllers')
                 layer: "users",
                 lat: user.latitude,
                 lng: user.longitude,
+                draggable: false,
+                message: "<div class='list card'>" +
+                            "<div class='item item-image'> " +
+                                "<img src='images/medium/" + user.profilePicture.id + "' />" +
+                            "</div>" +
+                            "<a class='button' href='#/app/users/" + user.id + "'>View Profile</a>" +
+                        "</div>",
                 icon: {
                     iconUrl: "images/small/" + user.profilePicture.id,
                     iconSize:     [50, 50],
                     iconAnchor:   [25, 25],
                     className: "user-marker-" + user.gender
                 },
-                enable: ['leafletDirectiveMarker.click']
+                enable: []
             }
             markers[user.id] = marker;
         }
