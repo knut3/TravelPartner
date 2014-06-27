@@ -20,7 +20,7 @@ public class Application extends BaseController {
 	    return ok(eventSourceService.subscribe(getCurrentUserId(), request().remoteAddress()));
 	}
 	
-	public Result options(){
+	public static Result options(){
 		response().setHeader("Access-Control-Allow-Origin", "*");
         response().setHeader("Allow", "*");
         response().setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");

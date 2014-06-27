@@ -21,4 +21,4 @@ GET		/me/messages/unread/count	@controllers.Messages.getUnreadMessageCount
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET		/images/:size/:id			@controllers.Resources.getImage(size: String, id: String)
 
-OPTIONS /*path						@controllers.Application.options()
+OPTIONS /							controllers.Application.options
