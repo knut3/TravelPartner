@@ -147,6 +147,6 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
 })
 .factory('Configuration', function(){
     return {
-        BASE_URL: ""
+        BASE_URL: "http://karrus.lakaweb.com:9000/"
     }
 });
