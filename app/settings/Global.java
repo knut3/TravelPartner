@@ -116,6 +116,9 @@ public class Global extends GlobalSettings {
             Promise<Result> result = this.delegate.call(ctx);
             Http.Response response = ctx.response();
             response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Allow", "*");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+            
             return result;
         }
     }
