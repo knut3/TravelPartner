@@ -19,5 +19,14 @@ public class Application extends BaseController {
 	public Result subscribeEvents() {
 	    return ok(eventSourceService.subscribe(getCurrentUserId(), request().remoteAddress()));
 	}
+	
+	public Result options(){
+		response().setHeader("Access-Control-Allow-Origin", "*");
+        response().setHeader("Allow", "*");
+        response().setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+        response().setHeader("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Content-Type, Accept, Referer, User-Agent");
+        
+        return ok();
+	}
 
 }
