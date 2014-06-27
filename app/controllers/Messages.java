@@ -3,21 +3,19 @@ package controllers;
 import java.util.List;
 
 import models.Message;
-import models.view.ConversationDetailsViewModel;
 import models.view.ConversationBriefViewModel;
-import models.view.MessageViewModel;
+import models.view.ConversationDetailsViewModel;
 import play.libs.Json;
 import play.mvc.Http.RequestBody;
 import play.mvc.Result;
 import services.interfaces.IMessageService;
-import annotations.Authorization.Authorized;
+import annotations.Authentication.RequiresAuthentication;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 
 import exceptions.AuthorizationException;
 
-@Authorized
+@RequiresAuthentication
 public class Messages extends BaseController {
 	
 	@Inject

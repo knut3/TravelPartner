@@ -43,3 +43,7 @@
     position: relative;
     right: 20%;
 }
+
+i.loader.ion-loading-c{
+    font-size: 60px;
+}

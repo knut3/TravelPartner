@@ -76,5 +76,14 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
 
     ezfbProvider.setInitParams({
         appId: '228240120706289'});
+
+    //Enable cross domain calls
+    $httpProvider.defaults.useXDomain = true;
+
+    //Remove the header used to identify ajax call  that would prevent CORS from working
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+    $httpProvider.interceptors.push("HttpErrorInterceptor");
+    $httpProvider.interceptors.push("LoadingInterceptor");
 });
 

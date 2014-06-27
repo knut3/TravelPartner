@@ -2,7 +2,7 @@ package controllers;
 
 import play.mvc.Result;
 import services.interfaces.IEventSourceService;
-import annotations.Authorization.Authorized;
+import annotations.Authentication.RequiresAuthentication;
 
 import com.google.inject.Inject;
 
@@ -15,7 +15,7 @@ public class Application extends BaseController {
   		return ok(views.html.main.render());
 	}
 	
-	@Authorized
+	@RequiresAuthentication
 	public Result subscribeEvents() {
 	    return ok(eventSourceService.subscribe(getCurrentUserId(), request().remoteAddress()));
 	}

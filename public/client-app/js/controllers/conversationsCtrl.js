@@ -6,12 +6,44 @@ angular.module('travel.controllers')
 
     //Set latest message to isRead when the user has successfully loaded
     //the conversation details
-    $scope.$on(LocalEvents.MESSAGES_READ, function(count, userId){
+    $scope.$on(LocalEvents.MESSAGES_READ, function(event, userId){
         for(var i = 0; i < $scope.conversations.length; i++){
             var conv = $scope.conversations[i];
             if(conv.userId === userId)
                 conv.latestMessage.isRead = true;
         }
+    });
+
+    $scope.$on(LocalEvents.MESSAGE_SENT, function(event, user, message){
+        var messageObject = {
+            message: message,
+            sentByMe: true,
+            dateTimeSent: "now",
+            isRead: true
+        };
+
+        var conversationExists = false;
+        var thisConversation = null;
+        for(var i = 0; i < $scope.conversations.length; i++){
+            var conv = $scope.conversations[i];
+            if(conv.userId === user.id) {
+                conv.latestMessage = messageObject
+                thisConversation = i;
+                conversationExists = true;
+            }
+        }
+
+        if(!conversationExists) {
+            $scope.conversations.push({
+                userId: user.id,
+                userName: user.name,
+                userPictureId: user.profilePictureId,
+                latestMessage: messageObject
+            });
+            thisConversation = $scope.conversations.length -1;
+        }
+
+        $scope.conversations = ionic.Utils.arrayMove($scope.conversations, thisConversation, 0);
     });
 
     //Update the conversations list on new message

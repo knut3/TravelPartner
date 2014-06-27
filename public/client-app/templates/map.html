@@ -1,11 +1,12 @@
 <ion-view title="Map">
     <ion-content scroll="false" has-header="true">
         <div id="mapWrapper" ng-controller="MapCtrl">
-            <leaflet data-tap-disabled="true" defaults="defaults"
-                     center="center"
-                     markers="markers"
-                     layers="layers"
-                     events="events">
+            <leaflet data-tap-disabled="true"
+                     defaults="map.defaults"
+                     center="map.center"
+                     markers="map.markers"
+                     layers="map.layers"
+                     events="map.events">
             </leaflet>
             <div id="mapOverlay">
                 <div>{{message}}</div>

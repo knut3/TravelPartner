@@ -6,11 +6,11 @@ import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
 import services.interfaces.ILocationService;
-import annotations.Authorization.Authorized;
+import annotations.Authentication.RequiresAuthentication;
 
 import com.google.inject.Inject;
 
-@Authorized
+@RequiresAuthentication
 public class Locations extends BaseController {
 	
 	@Inject

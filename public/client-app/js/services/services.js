@@ -29,7 +29,7 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
     };
     return service;
 })
-.factory('EventSourceService', function(Locations, $window, LocalStorageKeys, $rootScope, toaster) {
+.factory('EventSourceService', function(Locations, $window, LocalStorageKeys, $rootScope, toaster, Configuration) {
 
     var serverEvents = { NEW_MESSAGE: "new-message" };
     var serverEventsHandled = [ serverEvents.NEW_MESSAGE ];
@@ -44,7 +44,7 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
                     "It is highly suggested that you change to a browser that supports it, i.e. Firefox or Chrome", 5000);
                 return;
             }
-            var eventSource = new EventSource("/subscribe-events?accessToken="+$window.localStorage[LocalStorageKeys.ACCESS_TOKEN]);
+            var eventSource = new EventSource(Configuration.BASE_URL + "subscribe-events?accessToken="+$window.localStorage[LocalStorageKeys.ACCESS_TOKEN]);
 
             for(var i = 0; i < serverEventsHandled.length; i++)
             {
@@ -56,26 +56,26 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
         }
     }
 })
-.factory('Users', function($http) {
+.factory('Users', function($http, Configuration) {
 
   return {
     all: function() {
-        return $http.get("users");
+        return $http.get(Configuration.BASE_URL + "users");
     },
     get: function (userId) {
-        return $http.get("users/"+userId);
+        return $http.get(Configuration.BASE_URL + "users/"+userId);
     }
   }
 })
 
-.factory('Locations', function($http) {
+.factory('Locations', function($http, Configuration) {
 
     return {
         setCurrent: function (lat, lng) {
-            return $http.post("me/locations/current?lat="+lat+"&lng="+lng);
+            return $http.post(Configuration.BASE_URL + "me/locations/current?lat="+lat+"&lng="+lng);
         },
         getCurrent: function () {
-            return $http.get("me/locations/current");
+            return $http.get(Configuration.BASE_URL + "me/locations/current");
         }
     }
 })
@@ -91,22 +91,23 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
 .factory('LocalEvents', function() {
 
     return {
-        MESSAGES_READ: "messagesRead"
+        MESSAGES_READ: "messagesRead",
+        MESSAGE_SENT: "messageSent"
     }
 })
 
-.factory('Conversations', function($http) {
+.factory('Conversations', function($http, Configuration) {
     return {
         all: function() {
-            return $http.get("me/conversations");
+            return $http.get(Configuration.BASE_URL + "me/conversations");
         },
         get: function (id) {
             // Simple index lookup
-            return $http.get("me/conversations/" + id);
+            return $http.get(Configuration.BASE_URL + "me/conversations/" + id);
         },
         sendMessage: function(userId, message){
             return $http({
-                url: "users/"+ userId + "/messages",
+                url: Configuration.BASE_URL + "users/"+ userId + "/messages",
                 method: "POST",
                 headers: {
                     "Content-Type": "text/plain;charset=UTF-8"
@@ -115,7 +116,37 @@ angular.module('travel.services', ['http-auth-interceptor', 'ezfb'])
             });
         },
         getUnreadMessageCount: function(){
-            return $http.get("me/messages/unread/count");
+            return $http.get(Configuration.BASE_URL + "me/messages/unread/count");
         }
+    }
+})
+.factory('HttpErrorInterceptor',function($q, toaster){
+    return {
+        responseError: function(response){
+            if (response.status == 403){
+                toaster.pop("error", "", response.data);
+            }
+            return $q.reject(response);
+        }
+    }
+})
+.factory('LoadingInterceptor',function($injector){
+    return {
+        request: function(config){
+            $injector.get("$ionicLoading").show({
+                template: '<i class="loader icon ion-loading-c"></i>'
+            });
+            return config;
+        },
+
+        response: function(response){
+            $injector.get("$ionicLoading").hide();
+            return response;
+        }
+    }
+})
+.factory('Configuration', function(){
+    return {
+        BASE_URL: ""
     }
 });

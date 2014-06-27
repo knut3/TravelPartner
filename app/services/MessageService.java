@@ -13,6 +13,7 @@ import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 import com.google.inject.Inject;
 
+import exceptions.AuthenticationException;
 import exceptions.AuthorizationException;
 import models.Message;
 import models.User;
@@ -52,7 +53,7 @@ public class MessageService implements IMessageService{
 		boolean withinRange = userService.areUsersWithinRange(message.recipient.id, message.sender.id);
 		
 		if(!hasConversation && !withinRange)
-			throw new AuthorizationException();
+			throw new AuthorizationException("You are not allowed to write to this user");
 		
 		message.save();
 		User sender = User.find.byId(message.sender.id);
@@ -77,7 +78,7 @@ public class MessageService implements IMessageService{
 		if(messages.isEmpty()){
 			boolean withinRange = userService.areUsersWithinRange(currentUserId, anotherUserId);
 			if(!withinRange)
-				throw new AuthorizationException();
+				throw new AuthorizationException("You can not have a conversation with this user");
 		}
 			
 		

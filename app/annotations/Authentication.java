@@ -23,12 +23,12 @@ import utils.Utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 
-public class Authorization extends Action<Authorization.Authorized>{
+public class Authentication extends Action<Authentication.RequiresAuthentication>{
 		
-	@With(Authorization.class)
+	@With(Authentication.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface Authorized {
+	public @interface RequiresAuthentication {
 	}
 	
 	@Inject

@@ -4,14 +4,14 @@
       <div class="list">
 
           <div ng-repeat="message in conversation.messages">
-              <div class="item" ng-if="message.sentByMe" style="background-color:#dde1f5">
-                  <span class="item-note">{{message.dateTimeSent}}</span>
+              <div class="item" ng-if="message.sentByMe" style="background-color:#dde1f5;text-align:right">
+                  <span class="item-note" style="float: left">{{message.dateTimeSent}}</span>
                   <h2>Me</h2>
                   <p>{{message.message}}</p>
               </div>
-              <div class="item item-avatar-right"  ng-if="!message.sentByMe" style="text-align:right">
+              <div class="item item-avatar-left"  ng-if="!message.sentByMe">
                   <img ng-src="images/small/{{conversation.userPictureId}}" >
-                  <span class="item-note" style="float: left">{{message.dateTimeSent}}</span>
+                  <span class="item-note">{{message.dateTimeSent}}</span>
                   <h2>{{conversation.userName}}</h2>
                   <p>{{message.message}}</p>
               </div>

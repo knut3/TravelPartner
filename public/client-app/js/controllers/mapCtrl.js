@@ -4,8 +4,21 @@ angular.module('travel.controllers')
 
 
     $scope.message = "";
-    $scope.markers = {};
-    $scope.layers = {
+    $scope.map = {};
+    $scope.map.markers = {};
+    $scope.map.defaults = {
+        minZoom: 8,
+        zoomControl: true,
+        attributionControl: false
+    };
+
+    $scope.map.events = {
+        map: {
+            enable: ['zoomend'],
+            logic: "emit"
+        }
+    };
+    $scope.map.layers = {
         baselayers: {
             osm: {
                 name: 'OpenStreetMap',
@@ -42,7 +55,7 @@ angular.module('travel.controllers')
         else
             currentZoomLevel = parseInt(currentZoomLevel);
 
-        $scope.center = {
+        $scope.map.center = {
             lat: lat,
             lng: lon,
             zoom: currentZoomLevel
@@ -51,18 +64,7 @@ angular.module('travel.controllers')
 
     $scope.setCenter(59.7475, 10.3936); //Set to Røyken for now
 
-    $scope.defaults = {
-        minZoom: 8,
-        attributionControl: false
-    };
 
-    $scope.events = {
-        map: {
-            enable: ['zoomend'],
-            logic: "emit"
-        }
-
-    };
 
     $scope.$on("leafletDirectiveMap.zoomend", function(event, args) {
         $window.localStorage[LocalStorageKeys.CURRENT_ZOOM_LEVEL] = args.leafletEvent.target._zoom;
@@ -83,8 +85,8 @@ angular.module('travel.controllers')
                             var latitude = position.coords.latitude;
                             var longitude = position.coords.longitude;
                             $scope.setCenter(latitude, longitude);
-                            $scope.markers = createMarkers(users, latitude, longitude);
-                            $scope.message = "";
+                            $scope.map.markers = createMarkers(users, latitude, longitude);
+                            $scope.map.message = "";
                             //$scope.maxbounds = leafletBoundsHelpers.createBoundsFromArray([
                             //    [ location.latitude - RADIUS, location.longitude - RADIUS ],
                             //    [ location.latitude + RADIUS, location.longitude + RADIUS ]
@@ -105,7 +107,7 @@ angular.module('travel.controllers')
         if(location.latitude != null && location.longitude != null){
             $scope.setCenter(location.latitude, location.longitude);
             Users.all().success(function(users){
-                $scope.markers = createMarkers(users, location.latitude, location.longitude);
+                $scope.map.markers = createMarkers(users, location.latitude, location.longitude);
             });
             //var RADIUS = 0.1;
             //$scope.maxbounds = leafletBoundsHelpers.createBoundsFromArray([

@@ -2,6 +2,7 @@ package services.interfaces;
 
 import java.util.List;
 
+import exceptions.AuthenticationException;
 import exceptions.AuthorizationException;
 import models.Message;
 import models.view.ConversationDetailsViewModel;

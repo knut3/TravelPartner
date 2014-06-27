@@ -1,5 +1,5 @@
 angular.module('travel.controllers')
-.controller('ConversationCtrl', function ($scope, $stateParams, Users, Conversations, $ionicScrollDelegate, $timeout, EventSourceService, LocalEvents) {
+.controller('ConversationCtrl', function ($rootScope, $scope, $stateParams, Users, Conversations, $ionicScrollDelegate, $timeout, EventSourceService, LocalEvents) {
     $scope.sendForm = {};
     $scope.sendForm.message = "";
 
@@ -16,7 +16,7 @@ angular.module('travel.controllers')
         .success(function (conversation){
             $scope.conversation = conversation;
             if(conversation.unreadMessageCount > 0)
-                $scope.$emit(LocalEvents.MESSAGES_READ, conversation.unreadMessageCount, $stateParams.userId);
+                $rootScope.$broadcast(LocalEvents.MESSAGES_READ, $stateParams.userId, conversation.unreadMessageCount);
         })
         .error(function(){
             console.log("unable to fetch conversation");
@@ -45,6 +45,12 @@ angular.module('travel.controllers')
                     dateTimeSent: "Now"
                 });
                 $scope.scrollToBottom();
+
+                $rootScope.$broadcast(LocalEvents.MESSAGE_SENT, {
+                    id: $scope.conversation.userId,
+                    name: $scope.conversation.userName,
+                    profilePictureId: $scope.conversation.profilePictureId
+                }, $scope.sendForm.message);
                 $scope.sendForm.message = "";
             } )
             .error(function(){

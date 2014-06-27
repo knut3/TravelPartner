@@ -6,13 +6,13 @@ import models.User;
 import play.libs.Json;
 import play.mvc.Result;
 import services.interfaces.IUserService;
-import annotations.Authorization.Authorized;
+import annotations.Authentication.RequiresAuthentication;
 
 import com.google.inject.Inject;
 
 import exceptions.NoLocationException;
 
-@Authorized
+@RequiresAuthentication
 public class Users extends BaseController {
 	
 	@Inject
