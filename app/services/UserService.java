@@ -3,40 +3,46 @@ package services;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 import models.Picture;
 import models.User;
+import models.view.UserViewModel;
 import play.Logger;
-import play.libs.Json;
-import play.libs.ws.*;
 import play.libs.F.Promise;
-import play.mvc.Result;
+import play.libs.Json;
+import play.libs.ws.WS;
+import play.libs.ws.WSRequestHolder;
+import play.libs.ws.WSResponse;
 import services.interfaces.IImageService;
 import services.interfaces.IUserService;
 import utils.AppResources;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 
+import exceptions.InvalidIdException;
 import exceptions.NoLocationException;
 
 public class UserService implements IUserService{
 	
-	final static float RADIUS = 0.1f; // 6 km
+	public final static float RADIUS = 0.1f; // 6 km
 	
-	@Inject
 	IImageService imageService;
 	
+	@Inject
+	public UserService(IImageService imageService) {
+		this.imageService = imageService;
+	}
 
-	
 	public Promise<Void> createUser(String accessToken, String appSecretProof, long userId){
 		
 		User newUser = new User(userId);
-		newUser.save();
 		
 		String content;
 		try {
@@ -70,7 +76,7 @@ public class UserService implements IUserService{
 	  		
 	  		if(!profilePicturesContainer.has(0)){ // User has no albums (No profile picture)
 	  			newUser.profilePicture = Picture.find.byId(AppResources.DefaultProfilePictureId);
-	  			newUser.update();
+	  			newUser.save();
 	  			return null;
 	  		}
 	  		
@@ -105,7 +111,7 @@ public class UserService implements IUserService{
 	  		
 	  		profilePicture.save();
 	  		newUser.profilePicture = profilePicture;
-	  		newUser.update();
+	  		newUser.save();
 	  		
 	  		// Save rest of the profile pictures
 	  		while(pictureIterator.hasNext()){
@@ -132,41 +138,50 @@ public class UserService implements IUserService{
 	}
 
 	@Override
-	public List<User> getUsersNearby(long userId) throws NoLocationException {
+	public List<UserViewModel> getUsersNearby(long userId) throws NoLocationException {
 		
-		User user = User.find.byId(userId);
-		if(user.longitude == null || user.latitude == null)
+		User user = User.find.fetch("currentLocation").select("currentLocation").where().eq("id", userId).findUnique();
+
+		if(user.currentLocation == null)
 			throw new NoLocationException();
 		
 		List<User> users = User.find
 		.fetch("profilePicture")
+		.fetch("currentLocation")
 		.where()
-		 .ge("latitude", user.latitude - RADIUS)
-		 .le("latitude", user.latitude + RADIUS)
-		 .ge("longitude", user.longitude - RADIUS)
-		 .le("longitude", user.longitude + RADIUS)
+		 .ge("currentLocation.latitude", user.currentLocation.latitude - RADIUS)
+		 .le("currentLocation.latitude", user.currentLocation.latitude + RADIUS)
+		 .ge("currentLocation.longitude", user.currentLocation.longitude - RADIUS)
+		 .le("currentLocation.longitude", user.currentLocation.longitude + RADIUS)
 		 .not(Expr.eq("id", userId))
         .findList();
 		
-		return users;
+		List<UserViewModel> userViewModels = new ArrayList<UserViewModel>();
+		for(User u : users)
+			userViewModels.add(new UserViewModel(u));
+		
+		return userViewModels;
 	}
 
 	@Override
-	public boolean areUsersWithinRange(long userId, long anotherUserId) {
+	public boolean areUsersWithinRange(long userId, long anotherUserId) throws InvalidIdException {
 		
-		User user = User.find.byId(userId);
-		User anotherUser = User.find.byId(anotherUserId);
+		int userCount = User.find.where().or(Expr.eq("id", userId), Expr.eq("id", anotherUserId)).findRowCount();
 		
-		if(	user == null || anotherUser == null
-			|| user.latitude == null || user.longitude == null
-			|| anotherUser.latitude == null || anotherUser.longitude == null)
+		if(userCount != 2)
+			throw new InvalidIdException("Invalid user ID");
+		
+		User user = User.find.fetch("currentLocation").select("currentLocation").where().eq("id", userId).findUnique();
+		User anotherUser = User.find.fetch("currentLocation").select("currentLocation").where().eq("id", anotherUserId).findUnique();
+		
+		if(user.currentLocation == null || anotherUser.currentLocation == null)
 			return false;
 		
-		boolean withinLatitudeRange = user.latitude >= (anotherUser.latitude - RADIUS) 
-									&& user.latitude <= (anotherUser.latitude + RADIUS);
+		boolean withinLatitudeRange = user.currentLocation.latitude >= (anotherUser.currentLocation.latitude - RADIUS) 
+									&& user.currentLocation.latitude <= (anotherUser.currentLocation.latitude + RADIUS);
 		
-		boolean withinLongitudeRange = user.longitude >= (anotherUser.longitude - RADIUS) 
-				&& user.longitude <= (anotherUser.longitude + RADIUS);
+		boolean withinLongitudeRange = user.currentLocation.longitude >= (anotherUser.currentLocation.longitude - RADIUS) 
+				&& user.currentLocation.longitude <= (anotherUser.currentLocation.longitude + RADIUS);
 		
 		return withinLatitudeRange && withinLongitudeRange;
 		

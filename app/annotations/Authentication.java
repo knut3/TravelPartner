@@ -16,6 +16,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.mvc.With;
+import services.interfaces.IAuthenticationService;
 import services.interfaces.IUserService;
 import utils.ContextArgsKey;
 import utils.Utils;
@@ -33,29 +34,14 @@ public class Authentication extends Action<Authentication.RequiresAuthentication
 	
 	@Inject
 	private IUserService userService;
+	@Inject
+	private IAuthenticationService authService;
 		
     public Promise<Result> call(Http.Context ctx) throws Throwable {
 		String authHeader = ctx.request().getHeader("Authorization");
-		final String accessToken;
-		
-		if(authHeader != null){
-			authHeader = authHeader.trim();
-			String authType = authHeader.substring(0, 6);
-			if(!authType.equalsIgnoreCase("Bearer"))
-				return Promise.<Result>pure(Results.unauthorized("Auth type should be Bearer"));
-			accessToken = authHeader.substring(6).trim();
-		}		
-		else{
-			String accessTokenParam = ctx.request().getQueryString("accessToken");
-			if("".equals(accessTokenParam))
-				return Promise.<Result>pure(Results.unauthorized("Missing Authorization header"));
-			
-			accessToken = accessTokenParam;
-		}
-			
+		final String accessToken = authService.getAccessToken(ctx.request());
 		String appSecret = Play.application().configuration().getString("facebook.appSecret");
 		String appSecretProof = Utils.generateAppSecretProof(accessToken, appSecret);
-		
 		WSRequestHolder idRequest = WS.url("https://graph.facebook.com/me");
 		idRequest.setQueryParameter("access_token", accessToken);
 		idRequest.setQueryParameter("appsecret_proof", appSecretProof);
@@ -83,7 +69,14 @@ public class Authentication extends Action<Authentication.RequiresAuthentication
 	  			} );
 	  			return result;
 	  		}
-  	  		else return delegate.call(ctx);
+  	  		else{
+//  	  			int expires = idRespJson.get("expires").asInt();
+//  	  			if(expires < AppSettings.ACCESS_TOKEN_REFRESH_TRESHOLD){
+//  	  				String newAccessToken = authService.refreshAccessToken(accessToken);
+//  					ctx.response().setHeader(Http.HeaderNames.AUTHORIZATION, newAccessToken);
+//  	  			}
+  	  			return delegate.call(ctx);
+  	  		}
   		}
   		);
     }

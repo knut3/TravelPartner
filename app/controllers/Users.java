@@ -3,6 +3,7 @@ package controllers;
 import java.util.List;
 
 import models.User;
+import models.view.UserViewModel;
 import play.libs.Json;
 import play.mvc.Result;
 import services.interfaces.IUserService;
@@ -15,8 +16,13 @@ import exceptions.NoLocationException;
 @RequiresAuthentication
 public class Users extends BaseController {
 	
+	
+	private IUserService userService;
+	
 	@Inject
-	IUserService userService;
+	public Users(IUserService userService) {
+		this.userService = userService;
+	}
 	
 	public Result getUser(Long id){
 		
@@ -29,7 +35,7 @@ public class Users extends BaseController {
 	
 	public Result getUsersNearYou() throws NoLocationException{
 		
-		List<User> users = userService.getUsersNearby(getCurrentUserId());
+		List<UserViewModel> users = userService.getUsersNearby(getCurrentUserId());
 		
 		return ok(Json.toJson(users));
 		

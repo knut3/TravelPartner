@@ -1,9 +1,9 @@
 angular.module('travel.controllers')
 
-.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster, LocalStorageKeys) {
+.controller('MapCtrl', function ($scope, $window, Users, leafletEvents, $state, Locations, toaster, LocalStorageKeys, $cordovaGeolocation) {
 
 
-    $scope.message = "";
+    $scope.buttonMessage = "Update my position";
     $scope.map = {};
     $scope.map.markers = {};
     $scope.map.defaults = {
@@ -72,12 +72,12 @@ angular.module('travel.controllers')
 
     $scope.$on('leafletDirectiveMarker.click' , function(event, args){
         if(args.markerName !== "self"){
-            $state.go('app.view-profile', {userId: args.markerName})
+            //$state.go('app.view-profile', {userId: args.markerName})
         }
     });
     $scope.setPosition = function(){
-        $window.navigator.geolocation.getCurrentPosition(
-            function(position){
+        $cordovaGeolocation.getCurrentPosition()
+            .then(function(position) {
                 Locations.setCurrent(position.coords.latitude, position.coords.longitude)
                     .success(function(){
                         Users.all().success(function(users){
@@ -86,25 +86,25 @@ angular.module('travel.controllers')
                             var longitude = position.coords.longitude;
                             $scope.setCenter(latitude, longitude);
                             $scope.map.markers = createMarkers(users, latitude, longitude);
-                            $scope.map.message = "";
                             //$scope.maxbounds = leafletBoundsHelpers.createBoundsFromArray([
                             //    [ location.latitude - RADIUS, location.longitude - RADIUS ],
                             //    [ location.latitude + RADIUS, location.longitude + RADIUS ]
                             //]);
+                            $scope.buttonMessage = "Update my position";
                             toaster.pop("success", "", "Location updated", 2500);
                         });
 
                     });
             },
             function(err){
-                console.log(err);
+                alert()
                 toaster.pop("error", "", "Unable to get your location");
             }
         );
     };
 
     Locations.getCurrent().success(function(location){
-        if(location.latitude != null && location.longitude != null){
+        if(location != null && location !== ""){
             $scope.setCenter(location.latitude, location.longitude);
             Users.all().success(function(users){
                 $scope.map.markers = createMarkers(users, location.latitude, location.longitude);
@@ -116,7 +116,7 @@ angular.module('travel.controllers')
             //]);
         }
         else{
-            $scope.message = "Update your location to see travelers near you";
+            $scope.buttonMessage = "Update your location to see travelers near you";
         }
     });
 
@@ -129,14 +129,14 @@ angular.module('travel.controllers')
                 lat: user.latitude,
                 lng: user.longitude,
                 draggable: false,
-                //message: "<div class='list card'>" +
-                //            "<div class='item item-image'> " +
-                //                "<img src='images/medium/" + user.profilePicture.id + "' />" +
-                //            "</div>" +
-                //            "<a class='button' href='#/app/users/" + user.id + "'>View Profile</a>" +
-                //        "</div>",
+                message: "<div class='list card'>" +
+                            "<div class='item item-image'> " +
+                                "<img src='images/medium/" + user.profilePictureId + "' />" +
+                            "</div>" +
+                            "<a class='button' href='#/app/users/" + user.id + "'>View Profile</a>" +
+                        "</div>",
                 icon: {
-                    iconUrl: "images/small/" + user.profilePicture.id,
+                    iconUrl: "images/small/" + user.profilePictureId,
                     iconSize:     [50, 50],
                     iconAnchor:   [25, 25],
                     className: "user-marker-" + user.gender

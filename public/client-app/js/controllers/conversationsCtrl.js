@@ -78,6 +78,6 @@ angular.module('travel.controllers')
         if(!conversationExists)
             $scope.conversations.push(conversationBrief);
 
-        $scope.$apply();
+        $scope.$digest();
     });
 })

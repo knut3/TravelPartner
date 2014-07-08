@@ -1,4 +1,4 @@
-package settings;
+package config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -16,7 +16,7 @@ import services.interfaces.IMessageService;
 import services.interfaces.IUserService;
 import services.interfaces.ILocationService;
 
-public class IocBinds extends AbstractModule{
+public class TestIocBinds extends AbstractModule{
 	
 	@Override
 	protected void configure() {

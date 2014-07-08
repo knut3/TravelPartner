@@ -14,6 +14,7 @@ import annotations.Authentication.RequiresAuthentication;
 import com.google.inject.Inject;
 
 import exceptions.AuthorizationException;
+import exceptions.InvalidIdException;
 
 @RequiresAuthentication
 public class Messages extends BaseController {
@@ -21,14 +22,14 @@ public class Messages extends BaseController {
 	@Inject
 	private IMessageService messageService;
 	
-	public Result send(long recipientId) throws AuthorizationException{	
+	public Result send(long recipientId) throws AuthorizationException, InvalidIdException{	
 		RequestBody body = request().body();
 		String msg = body.asText();
 		messageService.send(new Message(this.getCurrentUserId(), recipientId, msg));
 		return ok();
 	}
 	
-	public Result getConversation(long userId) throws AuthorizationException{		
+	public Result getConversation(long userId) throws AuthorizationException, InvalidIdException{		
 		
 		ConversationDetailsViewModel msgs = messageService.getConversation(this.getCurrentUserId(), userId);
 		return ok(Json.toJson(msgs));

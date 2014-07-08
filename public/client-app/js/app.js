@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in viewProfileCtrl.js
 
 angular.module('travel.controllers', []);
-angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb', 'toaster'])
+angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb', 'toaster', 'ngCordova', 'pasvaz.bindonce'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -30,7 +30,13 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
       url: "/app",
       abstract: true,
       templateUrl: "assets/client-app/templates/main.html",
-      controller: 'MainCtrl'
+      controller: 'MainCtrl',
+      resolve:{
+          tokenVerification: function(AuthenticationService){
+              return AuthenticationService.verifyAccessToken();
+          }
+      }
+
     })
     .state('app.map', {
         url: '/map',
@@ -75,15 +81,25 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
     $urlRouterProvider.otherwise('/app/map');
 
     ezfbProvider.setInitParams({
-        appId: '228240120706289'});
+        appId: '228240120706289'//,
+        //nativeInterface: CDV.FB,
+        //useCachedDialogs: false
+    });
+
+    /*ezfbProvider.setLoadSDKFunction(function ($document, ezfbAsyncInit) {
+        ionic.Platform.ready(function(){
+            ezfbAsyncInit();
+        });
+    });*/
 
     //Enable cross domain calls
     $httpProvider.defaults.useXDomain = true;
 
     //Remove the header used to identify ajax call  that would prevent CORS from working
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    
+
     $httpProvider.interceptors.push("HttpErrorInterceptor");
+    $httpProvider.interceptors.push("AuthInterceptor");
     $httpProvider.interceptors.push("LoadingInterceptor");
 });
 

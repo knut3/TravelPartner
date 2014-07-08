@@ -3,38 +3,40 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
-import play.libs.Json;
-
-import com.avaje.ebean.Expr;
-import com.avaje.ebean.ExpressionList;
-import com.avaje.ebean.FetchConfig;
-import com.avaje.ebean.Query;
-import com.avaje.ebean.RawSql;
-import com.avaje.ebean.RawSqlBuilder;
-import com.google.inject.Inject;
-
-import exceptions.AuthenticationException;
-import exceptions.AuthorizationException;
 import models.Message;
 import models.User;
-import models.view.ConversationDetailsViewModel;
 import models.view.ConversationBriefViewModel;
+import models.view.ConversationDetailsViewModel;
 import models.view.MessageNotificationViewModel;
 import models.view.MessageViewModel;
+import play.libs.Json;
 import services.interfaces.IEventSourceService;
 import services.interfaces.IMessageService;
 import services.interfaces.IUserService;
 import utils.EventNames;
 
+import com.avaje.ebean.Expr;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
+import com.google.inject.Inject;
+
+import exceptions.AuthorizationException;
+import exceptions.InvalidIdException;
+
 public class MessageService implements IMessageService{
 
+	private IUserService userService;
+	private IEventSourceService eventSourceService;
+	
 	@Inject
-	IUserService userService;
-	@Inject
-	IEventSourceService eventSourceService;
+	public MessageService(IUserService userService, IEventSourceService eventSourceService) {
+		this.userService = userService;
+		this.eventSourceService = eventSourceService;
+	}
 	
 	@Override
-	public void send(Message message) throws AuthorizationException{
+	public void send(Message message) throws AuthorizationException, InvalidIdException{
+		
 		
 		boolean hasConversation = 
 				Message.find.where()
@@ -49,7 +51,8 @@ public class MessageService implements IMessageService{
 						)
 					)
 					.findRowCount() > 0;
-		
+					
+					
 		boolean withinRange = userService.areUsersWithinRange(message.recipient.id, message.sender.id);
 		
 		if(!hasConversation && !withinRange)
@@ -66,7 +69,7 @@ public class MessageService implements IMessageService{
 	}
 
 	@Override
-	public ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) throws AuthorizationException {
+	public ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) throws AuthorizationException, InvalidIdException {
 		List<Message> messages = Message.find
 			.where()
 			.or(
@@ -104,24 +107,28 @@ public class MessageService implements IMessageService{
 		
 		List<ConversationBriefViewModel> result = new ArrayList<ConversationBriefViewModel>();
 		
-		String sql =   "select ID, SENDER_ID, RECIPIENT_ID, MESSAGE from MESSAGE X"
-				  	+ " where ID >= all"
+		String sql =   "select X.ID, X.SENDER_ID, X.RECIPIENT_ID, X.MESSAGE, X.DATE_TIME_SENT, S.PROFILE_PICTURE_ID, R.PROFILE_PICTURE_ID"
+					+ " from MESSAGE X"
+				  	+ " join USERS S on X.SENDER_ID = S.ID"
+				  	+ " join USERS R on X.RECIPIENT_ID = R.ID"
+				  	+ " where X.ID >= all"
 				    + " (select ID FROM MESSAGE Y"
 				    + " where Y.SENDER_ID = X.SENDER_ID"
 				    + " and Y.RECIPIENT_ID = X.RECIPIENT_ID)";
 		
 		 RawSql rawSql = 
 				  RawSqlBuilder.parse(sql)
-				  .columnMapping("ID", "id")
-				  .columnMapping("SENDER_ID", "sender.id")
-			      .columnMapping("RECIPIENT_ID", "recipient.id")
-			      .columnMapping("MESSAGE", "message")
+				  .columnMapping("X.ID", "id")
+				  .columnMapping("X.SENDER_ID", "sender.id")
+			      .columnMapping("X.RECIPIENT_ID", "recipient.id")
+			      .columnMapping("X.MESSAGE", "message")
+			      .columnMapping("X.DATE_TIME_SENT", "dateTimeSent")
+			      .columnMapping("S.PROFILE_PICTURE_ID", "sender.profilePicture.id")
+			      .columnMapping("R.PROFILE_PICTURE_ID", "recipient.profilePicture.id")
 				      .create();
 		
 		List<Message> receivedMessages = Message.find
 				.setRawSql(rawSql)
-				.fetch("sender", new FetchConfig().query())
-				.fetch("recipient", new FetchConfig().query())
 				.where().or(
 						Expr.eq("sender.id", currentUserId),
 						Expr.eq("recipient.id", currentUserId)

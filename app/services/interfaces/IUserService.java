@@ -2,9 +2,10 @@ package services.interfaces;
 
 import java.util.List;
 
+import models.view.UserViewModel;
 import play.libs.F.Promise;
+import exceptions.InvalidIdException;
 import exceptions.NoLocationException;
-import models.User;
 
 
 public interface IUserService {
@@ -20,8 +21,8 @@ public interface IUserService {
 	 */
 	Promise<Void> createUser(String accessToken, String appSecretProof, long userId);
 	
-	List<User> getUsersNearby(long userId) throws NoLocationException;
+	List<UserViewModel> getUsersNearby(long userId) throws NoLocationException;
 	
-	boolean areUsersWithinRange(long userId, long anotherUserId);
+	boolean areUsersWithinRange(long userId, long anotherUserId) throws InvalidIdException;
 	
 }

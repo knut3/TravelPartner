@@ -2,20 +2,19 @@ package services.interfaces;
 
 import java.util.List;
 
-import exceptions.AuthenticationException;
-import exceptions.AuthorizationException;
 import models.Message;
-import models.view.ConversationDetailsViewModel;
 import models.view.ConversationBriefViewModel;
-import models.view.MessageViewModel;
+import models.view.ConversationDetailsViewModel;
+import exceptions.AuthorizationException;
+import exceptions.InvalidIdException;
 
 
 
 public interface IMessageService {
 	
-	void send(Message message) throws AuthorizationException;
+	void send(Message message) throws AuthorizationException, InvalidIdException;
 
-	ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) throws AuthorizationException;
+	ConversationDetailsViewModel getConversation(long currentUserId, long anotherUserId) throws AuthorizationException, InvalidIdException;
 
 	List<ConversationBriefViewModel> getAllConversations(long userId);
 	

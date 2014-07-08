@@ -3,6 +3,15 @@
 
 # --- !Ups
 
+create table location (
+  id                        bigint not null,
+  longitude                 float,
+  latitude                  float,
+  user_id                   bigint,
+  date_time                 timestamp,
+  constraint pk_location primary key (id))
+;
+
 create table message (
   id                        bigint not null,
   sender_id                 bigint,
@@ -26,11 +35,11 @@ create table users (
   first_name                varchar(255),
   gender                    varchar(255),
   profile_picture_id        varchar(255),
-  latitude                  float,
-  longitude                 float,
-  city                      varchar(255),
+  current_location_id       bigint,
   constraint pk_users primary key (id))
 ;
+
+create sequence location_seq;
 
 create sequence message_seq;
 
@@ -44,12 +53,16 @@ alter table message add constraint fk_message_recipient_2 foreign key (recipient
 create index ix_message_recipient_2 on message (recipient_id);
 alter table users add constraint fk_users_profilePicture_3 foreign key (profile_picture_id) references picture (id) on delete restrict on update restrict;
 create index ix_users_profilePicture_3 on users (profile_picture_id);
+alter table users add constraint fk_users_currentLocation_4 foreign key (current_location_id) references location (id) on delete restrict on update restrict;
+create index ix_users_currentLocation_4 on users (current_location_id);
 
 
 
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
+
+drop table if exists location;
 
 drop table if exists message;
 
@@ -58,6 +71,8 @@ drop table if exists picture;
 drop table if exists users;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists location_seq;
 
 drop sequence if exists message_seq;
 

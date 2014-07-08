@@ -3,17 +3,17 @@
   <ion-content has-header="true" padding="true" delegate-handle="conversationScroll">
       <div class="list">
 
-          <div ng-repeat="message in conversation.messages">
-              <div class="item" ng-if="message.sentByMe" style="background-color:#dde1f5;text-align:right">
-                  <span class="item-note" style="float: left">{{message.dateTimeSent}}</span>
+          <div bindonce ng-repeat="message in conversation.messages">
+              <div class="item" bo-if="message.sentByMe" style="background-color:#dde1f5;text-align:right">
+                  <span class="item-note" style="float: left" bo-text="message.dateTimeSent"></span>
                   <h2>Me</h2>
-                  <p>{{message.message}}</p>
+                  <p bo-text="message.message"></p>
               </div>
-              <div class="item item-avatar-left"  ng-if="!message.sentByMe">
-                  <img ng-src="images/small/{{conversation.userPictureId}}" >
-                  <span class="item-note">{{message.dateTimeSent}}</span>
-                  <h2>{{conversation.userName}}</h2>
-                  <p>{{message.message}}</p>
+              <div class="item item-avatar-left"  bo-if="!message.sentByMe">
+                  <img bo-src="'images/small/' + conversation.userPictureId" >
+                  <span class="item-note" bo-text="message.dateTimeSent"></span>
+                  <h2 bo-text="conversation.userName"></h2>
+                  <p bo-text="message.message"></p>
               </div>
           </div>
       </div>

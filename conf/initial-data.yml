@@ -3,57 +3,12 @@
 
 users:
     - !!models.User
-        id:      733450384
-        firstName:  Knut
-        profilePicture: !!models.Picture
-                            id: default-profile-pic
-        latitude: 59.75
-        longitude: 10.3936
-        gender: male
-
-    - !!models.User
         id:      1
         firstName:  Stian
         profilePicture: !!models.Picture
                             id: default-profile-pic
-        latitude: 59.75
-        longitude: 10.3936
-        gender: male
-        
-    - !!models.User
-        id: 2
-        firstName:  Eva
-        profilePicture: !!models.Picture
-                            id: default-profile-pic
-        latitude: 59.7475
-        longitude: 10.41
-        gender: female
-    
-    - !!models.User
-        id: 3
-        firstName:  Kim
-        profilePicture: !!models.Picture
-                            id: default-profile-pic
-        latitude: 59.744167
-        longitude: 10.34
-        gender: female
-    
-    - !!models.User
-        id: 4
-        firstName:  Jørgen
-        profilePicture: !!models.Picture
-                            id: default-profile-pic
-        latitude: 59.78
-        longitude: 10.35
-        gender: male
-        
-    - !!models.User
-        id: 5
-        firstName:  Karsten
-        profilePicture: !!models.Picture
-                            id: default-profile-pic
-        latitude: 59.735
-        longitude: 10.33
+        currentLocation: !!models.Location
+                            id: 1
         gender: male
     
 # Pictures
@@ -65,6 +20,19 @@ pictures:
         ownerId:      1
         height:     50
         width:      50
+        
+        
+# Locations
+
+locations:
+
+    - !!models.Location
+        id: 1
+        latitude: 59.75
+        longitude: 10.3936
+        user: !!models.User
+                id: 1
+        
                              
 
         

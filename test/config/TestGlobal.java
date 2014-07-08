@@ -1,4 +1,4 @@
-package settings;
+package config;
 
 import java.util.List;
 import java.util.Map;
@@ -25,18 +25,17 @@ import com.google.inject.Injector;
 
 import exceptions.AuthenticationException;
 import exceptions.AuthorizationException;
-import exceptions.InvalidIdException;
 import exceptions.NoLocationException;
 import exceptions.TravelPartnerException;
 
-public class Global extends GlobalSettings {
+public class TestGlobal extends GlobalSettings {
 
 	private Injector injector;
 
     @Override
     public void onStart(Application app) {
-        injector = Guice.createInjector(new IocBinds());
-        InitialData.insert(app);
+        injector = Guice.createInjector(new TestIocBinds());
+        //InitialData.insert(app);
         AppResources.DefaultProfilePictureId = "default-profile-pic";
     }
 
@@ -58,8 +57,6 @@ public class Global extends GlobalSettings {
                 
                 // Insert users first
                 Ebean.save(all.get("users"));
-                
-                Ebean.save(all.get("locations"));
                 
                 //Ebean.save(all.get("messages"));
                 
@@ -95,9 +92,6 @@ public class Global extends GlobalSettings {
 		else if(e instanceof NoLocationException)
 			result = Results.status(HttpStatus.SC_METHOD_NOT_ALLOWED, 
 					"You have to update your GPS coordinates in order to see other travelers");
-		
-		else if(e instanceof InvalidIdException)
-			result = Results.badRequest(tpEx.getMessage());
 		
 		
 		

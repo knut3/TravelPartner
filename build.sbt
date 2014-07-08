@@ -1,9 +1,8 @@
-import play.Project._
-
-name := """Travel Partner"""
+name := """TravelPartner"""
 
 version := "0.1"
 
+lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 libraryDependencies ++= Seq(
   javaJdbc,
@@ -14,5 +13,5 @@ libraryDependencies ++= Seq(
   "org.imgscalr" % "imgscalr-lib" % "4.2",
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
   )
-
-play.Project.playJavaSettings :+ (Keys.fork in (Test) := false)
+  
+  fork in Test := false

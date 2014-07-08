@@ -22,12 +22,9 @@ public class User extends Model{
 	
 	@OneToOne
 	public Picture profilePicture;
-		
-	public Float latitude;
 	
-	public Float longitude;
-	
-	public String city;
+	@OneToOne
+	public Location currentLocation;
 	
 	
 	public User(Long id){
@@ -38,16 +35,12 @@ public class User extends Model{
 		this.id = id;
 		this.firstName = firstName;
 		this.gender = gender;
-		latitude = null;
-		longitude = null;
-		city = null;
+		currentLocation = null;
 		
 	}
 	
-	public void setLocation(float latitude, float longitude, String city){
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.city = city;
+	public void setLocation(Location l){
+		currentLocation = l;
 	}
 	
 	public static Finder<Long,User> find = new Finder<Long,User>(

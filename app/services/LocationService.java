@@ -1,5 +1,6 @@
 package services;
 
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import play.libs.F.Promise;
@@ -14,10 +15,15 @@ public class LocationService implements ILocationService{
 		locationReq.setQueryParameter("format", "json");
 		locationReq.setQueryParameter("lat", String.valueOf(latitude));
 		locationReq.setQueryParameter("lon", String.valueOf(longitude));
-		locationReq.setQueryParameter("zoom", "5");
+		locationReq.setQueryParameter("zoom", "12");
 		Promise<WSResponse> locationPromise = locationReq.get();
 		
-		return locationPromise.map(location-> location.asJson().get("display_name").asText() );
+		return locationPromise.map(location-> {
+			JsonNode city = location.asJson().findValue("city");
+			if(city != null)
+				return city.asText();
+			else return "";
+		});
 
 	}
 

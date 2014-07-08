@@ -6,12 +6,13 @@
                      center="map.center"
                      markers="map.markers"
                      layers="map.layers"
-                     events="map.events">
+                     events="map.events"
+                     watch-markers="false">
             </leaflet>
             <div id="mapOverlay">
                 <div>{{message}}</div>
                 <button ng-click="setPosition()" id="updateLocationBtn" class="button button-block button-positive">
-                    Update my location
+                    {{buttonMessage}}
                 </button>
             </div>
 

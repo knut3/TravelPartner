@@ -16,6 +16,7 @@ angular.module('travel.controllers')
     });
 
     $scope.$on('event:auth-loginConfirmed', function() {
+        console.log("login confirmed");
         $scope.loginModal.hide();
 
     });

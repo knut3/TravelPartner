@@ -2,6 +2,7 @@ package controllers;
 
 import models.Location;
 import models.User;
+import models.view.Coordinate;
 import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
@@ -21,7 +22,9 @@ public class Locations extends BaseController {
 		Promise<String> cityPromise = locationService.getCityByCoordinates(latitude, longitude);
 		
 		return cityPromise.map(city -> {
-			user.setLocation(latitude, longitude, city);
+			Location l = new Location(user.id, latitude, longitude, city);
+			l.save();
+			user.setLocation(l);
 			user.save();
 			return ok();
 		});
@@ -29,10 +32,12 @@ public class Locations extends BaseController {
 		
 	}
 	
-	public Result getCurrentLocation(){		
+	public Result getCurrentLocation(){
 		User user = User.find.ref(getCurrentUserId());
+		if(user.currentLocation == null)
+			return ok();
 		
-		return ok(Json.toJson(new Location(user.latitude, user.longitude, user.city)));
+		return ok(Json.toJson(new Coordinate(user.currentLocation.latitude, user.currentLocation.longitude)));
 	}
 	
 	

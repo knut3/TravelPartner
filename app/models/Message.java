@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -13,7 +14,7 @@ import play.db.ebean.Model;
 public class Message extends Model{
 
 	private static final long serialVersionUID = 2L;
-	@Id
+	@Id @GeneratedValue
 	public long id;
 	@ManyToOne
 	public User sender;
