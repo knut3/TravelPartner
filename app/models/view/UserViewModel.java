@@ -10,6 +10,8 @@ public class UserViewModel {
 	public String profilePictureId;
 	public float latitude;
 	public float longitude;
+	public boolean isFriend;
+	
 	public UserViewModel(User user) {
 		this.id = user.id;
 		this.firstName = user.firstName;
@@ -17,6 +19,7 @@ public class UserViewModel {
 		this.profilePictureId = user.profilePicture.id;
 		this.latitude = user.currentLocation.latitude;
 		this.longitude = user.currentLocation.longitude;
+		this.isFriend = false;
 	}
 	
 	

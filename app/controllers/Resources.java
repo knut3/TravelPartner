@@ -2,16 +2,16 @@ package controllers;
 
 import java.io.File;
 
+import play.api.mvc.Action;
+import play.api.mvc.AnyContent;
 import play.mvc.Result;
 
 
 public class Resources extends BaseController {
 	
-	public Result getImage(String size, String id){
+	public Action<AnyContent> getImage(String size, String id){
 		
-		response().setContentType("image");
-
-        return ok(new File("public/images/"+ size + "/" + id + ".jpg"));
+		return Assets.at("/public/images/" + size + "/",  id + ".jpg", false);
 		
 	}
 	

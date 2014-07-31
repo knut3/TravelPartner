@@ -3,10 +3,10 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
 // 'starter.controllers' is found in viewProfileCtrl.js
 
 angular.module('travel.controllers', []);
+angular.module('travel.services', ['http-auth-interceptor', 'ezfb']);
 angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 'travel.services', 'ezfb', 'toaster', 'ngCordova', 'pasvaz.bindonce'])
 
 .run(function($ionicPlatform) {
@@ -29,7 +29,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
     .state('app', {
       url: "/app",
       abstract: true,
-      templateUrl: "assets/client-app/templates/main.html",
+      templateUrl: "templates/main.html",
       controller: 'MainCtrl',
       resolve:{
           tokenVerification: function(AuthenticationService){
@@ -42,7 +42,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         url: '/map',
         views: {
             'menuContent' :{
-                templateUrl: 'assets/client-app/templates/map.html'
+                templateUrl: 'templates/map.html'
             }
         }
     })
@@ -51,7 +51,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         url: '/users/:userId',
         views: {
             'menuContent' :{
-                templateUrl: 'assets/client-app/templates/view-profile.html',
+                templateUrl: 'templates/view-profile.html',
                 controller: 'ViewProfileCtrl'
             }
         }
@@ -61,7 +61,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
       url: '/conversations/:userId',
       views: {
           'menuContent' :{
-              templateUrl: 'assets/client-app/templates/conversation.html',
+              templateUrl: 'templates/conversation.html',
               controller: 'ConversationCtrl'
           }
       }
@@ -71,7 +71,7 @@ angular.module('travel', ['ionic', 'leaflet-directive', 'travel.controllers', 't
         url: '/account',
         views: {
             'menuContent' :{
-                templateUrl: 'assets/client-app/templates/account.html',
+                templateUrl: 'templates/account.html',
                 controller: 'AccountCtrl'
         }
         }

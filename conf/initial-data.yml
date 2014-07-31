@@ -10,6 +10,69 @@ users:
         currentLocation: !!models.Location
                             id: 1
         gender: male
+        
+    - !!models.User
+        id:      2
+        firstName:  Ole
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
+        
+     - !!models.User
+        id:      1
+        firstName:  Stian
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
+        
+    - !!models.User
+        id:      1
+        firstName:  Stian
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
+        
+    - !!models.User
+        id:      1
+        firstName:  Stian
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
+        
+    - !!models.User
+        id:      1
+        firstName:  Stian
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
+        
+     - !!models.User
+        id:      1
+        firstName:  Stian
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
+        
+    - !!models.User
+        id:      1
+        firstName:  Stian
+        profilePicture: !!models.Picture
+                            id: default-profile-pic
+        currentLocation: !!models.Location
+                            id: 1
+        gender: male
     
 # Pictures
 

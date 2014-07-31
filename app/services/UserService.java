@@ -138,7 +138,7 @@ public class UserService implements IUserService{
 	}
 
 	@Override
-	public List<UserViewModel> getUsersNearby(long userId) throws NoLocationException {
+	public Promise<List<UserViewModel>> getUsersNearby(long userId, String accessToken, String appSecretProof) throws NoLocationException {
 		
 		User user = User.find.fetch("currentLocation").select("currentLocation").where().eq("id", userId).findUnique();
 
@@ -156,11 +156,41 @@ public class UserService implements IUserService{
 		 .not(Expr.eq("id", userId))
         .findList();
 		
-		List<UserViewModel> userViewModels = new ArrayList<UserViewModel>();
-		for(User u : users)
-			userViewModels.add(new UserViewModel(u));
 		
-		return userViewModels;
+		StringBuilder userIds = new StringBuilder();
+		for(int i = 0; i < users.size(); i++){
+			if(i != 0 )
+				userIds.append(',');
+			userIds.append(users.get(i).id);
+		}
+		
+		
+		WSRequestHolder friendsRequest = WS.url("https://graph.facebook.com/fql");
+		friendsRequest.setQueryParameter("access_token", accessToken);
+		friendsRequest.setQueryParameter("appsecret_proof", appSecretProof);
+		friendsRequest.setQueryParameter("q", "SELECT uid2 FROM friend WHERE uid1=me() and uid2 in(" + userIds + ")");
+  		Promise<WSResponse> friendsResponsePromise = friendsRequest.get();
+		
+		return friendsResponsePromise.map(friendsResp -> {
+			
+			JsonNode friends = friendsResp.asJson().withArray("data");			
+			
+			List<UserViewModel> userViewModels = new ArrayList<UserViewModel>();
+			for(User u : users){
+				
+				UserViewModel uv = new UserViewModel(u);
+				
+				for(JsonNode friend : friends){
+					long friendId = Long.parseLong(friend.get("uid2").asText());
+					if(friendId == u.id)
+						uv.isFriend = true;
+				}
+				userViewModels.add(uv);
+			}
+			
+			return userViewModels;
+		});
+		
 	}
 
 	@Override
@@ -186,5 +216,7 @@ public class UserService implements IUserService{
 		return withinLatitudeRange && withinLongitudeRange;
 		
 	}
+	
+	
 	
 }

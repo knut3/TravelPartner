@@ -33,7 +33,7 @@ public class Locations extends BaseController {
 	}
 	
 	public Result getCurrentLocation(){
-		User user = User.find.ref(getCurrentUserId());
+		User user = User.find.fetch("currentLocation").where().eq("id", getCurrentUserId()).findUnique();
 		if(user.currentLocation == null)
 			return ok();
 		

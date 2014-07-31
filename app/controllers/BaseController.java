@@ -10,4 +10,12 @@ public class BaseController extends Controller{
 		return Long.parseLong((String) Http.Context.current().args.get(ContextArgsKey.USER_ID));
 	}
 	
+	protected String getCurrentAccessToken(){
+		return (String) Http.Context.current().args.get(ContextArgsKey.ACCESS_TOKEN);
+	}
+	
+	protected String getCurrentAppSecretProof(){
+		return (String) Http.Context.current().args.get(ContextArgsKey.APP_SECRET_PROOF);
+	}
+	
 }

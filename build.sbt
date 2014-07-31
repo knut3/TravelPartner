@@ -14,4 +14,4 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
   )
   
-  fork in Test := false
+fork in Test := false

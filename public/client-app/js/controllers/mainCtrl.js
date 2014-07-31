@@ -5,7 +5,7 @@ angular.module('travel.controllers')
         AuthenticationService.authHeaderUpdateFromCache();
         EventSourceService.setup();
 
-        $ionicModal.fromTemplateUrl('assets/client-app/templates/login.html', function(modal) {
+        $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
                 $scope.loginModal = modal;
             },
             {

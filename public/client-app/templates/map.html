@@ -9,13 +9,30 @@
                      events="map.events"
                      watch-markers="false">
             </leaflet>
-            <div id="mapOverlay">
-                <div>{{message}}</div>
-                <button ng-click="setPosition()" id="updateLocationBtn" class="button button-block button-positive">
+            <div class="bar bar-footer">
+                <div  class="col-20">
+                    <label class="checkbox">
+                        <input ng-change="filterMarkers()" ng-model="showStrangers" type="checkbox">
+                        <i class="icon ion-android-friends" ></i>
+                    </label>
+
+                </div>
+                <div class="col-20">
+                    <label class="checkbox">
+                        <input ng-change="filterMarkers()" ng-model="showFriends" type="checkbox">
+                    </label>
+                    <i class="icon ion-android-friends" ></i>
+                </div>
+                <div  class="col-20">
+                    <label class="checkbox">
+                        <input ng-change="filterMarkers()" ng-model="showSelf" type="checkbox">
+                    </label>
+                    <i class="icon ion-android-friends" ></i>
+                </div>
+                <button ng-click="setPosition()" id="updateLocationBtn" class="col-40 button button-positive">
                     {{buttonMessage}}
                 </button>
             </div>
-
         </div>
     </ion-content>
 </ion-view>

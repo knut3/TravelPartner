@@ -2508,7 +2508,7 @@
             return;
           }
           if (!isDefined(groups[groupName])) {
-            groups[groupName] = new L.MarkerClusterGroup();
+            groups[groupName] = new L.MarkerClusterGroup({showCoverageOnHover: false});
             map.addLayer(groups[groupName]);
           }
           groups[groupName].addLayer(marker);

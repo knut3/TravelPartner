@@ -20,6 +20,11 @@ public class Application extends BaseController {
 	    return ok(eventSourceService.subscribe(getCurrentUserId(), request().remoteAddress()));
 	}
 	
+	@RequiresAuthentication
+	public Result registerForPushNotifications() {
+	    return ok(eventSourceService.subscribe(getCurrentUserId(), request().remoteAddress()));
+	}
+	
 	public static Result options(String path){
 		response().setHeader("Access-Control-Allow-Origin", "*");
         response().setHeader("Allow", "*");

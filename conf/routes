@@ -5,6 +5,7 @@
 # Home page
 GET     /                           @controllers.Application.index
 GET		/subscribe-events			@controllers.Application.subscribeEvents
+POST	/reg-for-push-notifications @controllers.Application.registerForPushNotifications
 
 GET		/users/:id					@controllers.Users.getUser(id: Long)
 GET		/users						@controllers.Users.getUsersNearYou

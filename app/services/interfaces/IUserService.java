@@ -20,9 +20,11 @@ public interface IUserService {
 	 * @return 
 	 */
 	Promise<Void> createUser(String accessToken, String appSecretProof, long userId);
-	
-	List<UserViewModel> getUsersNearby(long userId) throws NoLocationException;
-	
+		
 	boolean areUsersWithinRange(long userId, long anotherUserId) throws InvalidIdException;
+
+	Promise<List<UserViewModel>> getUsersNearby(long userId, String accessToken,
+			String appSecretProof) throws NoLocationException;
+	
 	
 }

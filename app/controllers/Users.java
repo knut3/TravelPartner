@@ -4,6 +4,7 @@ import java.util.List;
 
 import models.User;
 import models.view.UserViewModel;
+import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
 import services.interfaces.IUserService;
@@ -33,12 +34,12 @@ public class Users extends BaseController {
 		
 	}
 	
-	public Result getUsersNearYou() throws NoLocationException{
+	public Promise<Result> getUsersNearYou() throws NoLocationException{
 		
-		List<UserViewModel> users = userService.getUsersNearby(getCurrentUserId());
+		Promise<List<UserViewModel>> usersPromise = userService.getUsersNearby(getCurrentUserId(), getCurrentAccessToken(), getCurrentAppSecretProof());
 		
-		return ok(Json.toJson(users));
-		
+		return usersPromise.map(users -> ok(Json.toJson(users)));
+				
 	}
 	
 }

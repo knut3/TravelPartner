@@ -1,22 +1,26 @@
 package settings;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
+import models.Location;
+import models.Picture;
 import models.User;
+import models.view.Coordinate;
 
 import org.apache.http.HttpStatus;
 
 import play.Application;
 import play.GlobalSettings;
 import play.libs.F.Promise;
-import play.libs.Yaml;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.mvc.Results.Status;
+import services.UserService;
 import utils.AppResources;
 
 import com.avaje.ebean.Ebean;
@@ -50,18 +54,44 @@ public class Global extends GlobalSettings {
         public static void insert(Application app) {
             if(Ebean.find(User.class).findRowCount() == 0) {
                 
-                @SuppressWarnings("unchecked")
-				Map<String,List<Object>> all = (Map<String,List<Object>>)Yaml.load("initial-data.yml");
-
-                // Insert projects
-                Ebean.save(all.get("pictures"));
+            	final int NUM_USERS = 150;
+            	final Coordinate CENTER = new Coordinate(59.7475f, 10.3936f);
+            	Random rnd = new Random();
+            	final float RADIUS = UserService.RADIUS;
+            	
+            	Picture defaultPic = new Picture("default-profile-pic", 1l, 50, 50);
+                List<Location> locations = new ArrayList<Location>();
+                List<User> users = new ArrayList<User>();
                 
-                // Insert users first
-                Ebean.save(all.get("users"));
+                for(long i = 1; i <= NUM_USERS; i++){
+                	User user = new User(i);
+                	user.firstName = "User " + i;
+                	Location loc = new Location(i, 
+                			CENTER.latitude - RADIUS + (RADIUS * 2 * rnd.nextFloat()),
+                			CENTER.longitude - RADIUS + (RADIUS * 2 * rnd.nextFloat()),
+                			"Røyken");
+                	user.setLocation(loc);
+                	
+                	
+                	// Users on same location
+                	User user2 = new User(NUM_USERS+i);
+                	Location loc2 = new Location(NUM_USERS+i, CENTER.latitude, CENTER.longitude, "Røyken");
+                	user2.currentLocation = loc2;
+                	user2.firstName = "User " + NUM_USERS + i;
+                	user.profilePicture = user2.profilePicture = defaultPic;
+                	user.gender = user2.gender = i % 2 == 0 ? "male" : "female";
+                	
+                	locations.add(loc);
+                	users.add(user);
+                	locations.add(loc2);
+                	users.add(user2);
+                	
+                }
                 
-                Ebean.save(all.get("locations"));
                 
-                //Ebean.save(all.get("messages"));
+                Ebean.save(locations);
+                defaultPic.save();
+                Ebean.save(users);
                 
             }
         }
